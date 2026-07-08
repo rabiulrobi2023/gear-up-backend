@@ -1,0 +1,8 @@
+model Category {
+    id String @id @unique @default(uuid())
+    name String @unique
+    createdAt DateTime @db.Timestamptz() @default(now())
+    updatedAt DateTime @updatedAt @db.Timestamptz()
+
+    @@map("categories")
+}

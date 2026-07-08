@@ -9,6 +9,11 @@ const requiredEnvVariables = [
   "FRONTEND_URL",
   "NODE_ENV",
   "BCRYPT_SALT_ROUND",
+  "BCRYPT_SALT_ROUND",
+  "JWT_ACCESS_TOKEN_SECRET",
+  "JWT_ACCESS_TOKEN_EXPIRE_IN",
+  "JWT_REFRESH_TOKEN_SECRET",
+  "JWT_REFRESH_TOKEN_EXPIRE_IN",
 ] as const;
 
 const loadEnvConfig = () => {
