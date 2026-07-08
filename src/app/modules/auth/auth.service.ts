@@ -6,6 +6,12 @@ import AppError from "../../utils/AppError";
 import { StatusCodes } from "http-status-codes";
 
 const registerUserIntoDB = async (payload: IRegisterUser) => {
+  if (payload.role === "ADMIN") {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "You can not create an admin account",
+    );
+  }
   const isUserExists = await prisma.user.findUnique({
     where: {
       email: payload.email,

@@ -6,7 +6,8 @@ import { NodeEnv, Prisma } from "../../../generated/prisma/client";
 import config from "../config";
 
 const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
-  let statusCode =
+  console.log(error)
+    let statusCode =
     typeof error?.statusCode === "number"
       ? error.statusCode
       : StatusCodes.INTERNAL_SERVER_ERROR;
@@ -146,7 +147,7 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
     success: false,
     statusCode,
     message,
-    stack: config.NODE_ENV === NodeEnv.DEVELOPMENT ? error.stack : undefined,
+    // stack: config.NODE_ENV === NodeEnv.DEVELOPMENT ? error.stack : undefined,
     error: config.NODE_ENV === NodeEnv.DEVELOPMENT ? error : undefined,
   });
 };

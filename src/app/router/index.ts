@@ -8,7 +8,7 @@ const router = Router();
 
 const routes: IRouter[] = [
   {
-    path: "/auth/register",
+    path: "/auth",
     route: AuthRouter,
   },
 ];
