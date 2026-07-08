@@ -1,7 +1,7 @@
 import { PrismaPg } from "@prisma/adapter-pg";
 import config from "../config";
-import { PrismaClient } from "@prisma/client/extension";
+import { PrismaClient } from "../../../generated/prisma/client";
 
 const adapter = new PrismaPg(config.DATABASE_URL);
-const prisma = new PrismaClient(adapter);
+const prisma = new PrismaClient({ adapter });
 export { prisma };
