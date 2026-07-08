@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+generated/
+test.ts
+test.js
+/generated/prisma
+.doc
