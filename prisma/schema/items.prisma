@@ -1,0 +1,22 @@
+model Items {
+  id          String  @id @default(uuid())
+  name        String
+  brand       String?
+  description String?
+  images      String?
+
+  providerId String
+  provider   User   @relation(fields: [providerId], references: [id])
+
+  categoryId String
+  category   Categories @relation(fields: [categoryId], references: [id])
+
+  price Decimal @db.Decimal(10, 2)
+
+  stock       Int
+  isAvailable Boolean
+  createdAt   DateTime @default(now()) @db.Timestamptz()
+  updatedAt   DateTime @updatedAt @db.Timestamptz()
+
+  @@map("items")
+}

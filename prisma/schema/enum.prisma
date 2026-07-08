@@ -9,7 +9,6 @@ enum UserStatus {
   SUSPEND
 }
 
-
 enum NodeEnv {
   DEVELOPMENT
   PRODUCTION

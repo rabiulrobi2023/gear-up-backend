@@ -1,8 +1,10 @@
-model Category {
-    id String @id @unique @default(uuid())
-    name String @unique
-    createdAt DateTime @db.Timestamptz() @default(now())
-    updatedAt DateTime @updatedAt @db.Timestamptz()
+model Categories {
+  id   String @id @unique @default(uuid())
+  name String @unique
 
-    @@map("categories")
+  items     Items[]
+  createdAt DateTime @default(now()) @db.Timestamptz()
+  updatedAt DateTime @updatedAt @db.Timestamptz()
+
+  @@map("categories")
 }
