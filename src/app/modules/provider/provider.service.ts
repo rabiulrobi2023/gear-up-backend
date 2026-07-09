@@ -52,10 +52,29 @@ const updateItem = async (
     include: { category: { select: { name: true } } },
   });
 
-  return result
+  return result;
+};
+
+const deleteGearFromDB = async (id: string) => {
+  const isGearExist = await prisma.items.findUnique({ where: { id } });
+  if (!isGearExist) {
+    throw new AppError(StatusCodes.NOT_FOUND, "Gear not found");
+  }
+
+  const haveAnyOrderOfThisGear = await prisma.orders.findFirst();
+  if (haveAnyOrderOfThisGear) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "You cannot delete this gear, because it has already perched by customer",
+    );
+  }
+
+  await prisma.items.delete({ where: { id } });
+  return null;
 };
 
 export const ProviderService = {
   addItem,
-  updateItem
+  updateItem,
+  deleteGearFromDB,
 };

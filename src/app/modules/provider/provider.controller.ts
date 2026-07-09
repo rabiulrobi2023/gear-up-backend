@@ -14,6 +14,7 @@ const addItem = catchAsync(async (req, res, next) => {
     data: result,
   });
 });
+
 const updateItem = catchAsync(async (req, res, next) => {
   const payload = req.body;
   const providerId = req.user.id;
@@ -31,7 +32,19 @@ const updateItem = catchAsync(async (req, res, next) => {
   });
 });
 
+const deleteGear = catchAsync(async (req, res, next) => {
+  const id = req.params.id;
+  const result = await ProviderService.deleteGearFromDB(id as string);
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Gear deleted successfully",
+    data: result,
+  });
+});
+
 export const ProviderController = {
   addItem,
-  updateItem
+  updateItem,
+  deleteGear,
 };

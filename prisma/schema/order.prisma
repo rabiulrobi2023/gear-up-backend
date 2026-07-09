@@ -1,4 +1,4 @@
-model Order {
+model Orders {
     id String @id @default(uuid())
 
     customerId String
@@ -10,7 +10,7 @@ model Order {
     quantity    Int
     unitPrice   Decimal     @db.Decimal(10, 2)
     totalAmount Decimal     @db.Decimal(10, 2)
-    startDate   DateTime    @db.Timestamptz()
+    startDate   DateTime    @db.Timestamptz() @default(now())
     returnDate  DateTime    @db.Timestamptz()
     status      OrderStatus @default(PENDING)
 

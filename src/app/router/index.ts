@@ -3,7 +3,7 @@ import { authRouter } from "../modules/auth/auth.route";
 import { adminRouter } from "../modules/admin/admin.route";
 import { providerRouter } from "../modules/provider/provider.route";
 import { orderRouter } from "../modules/order/order.route";
-
+import { publicRouter } from "../modules/public/public.route";
 
 interface IRouter {
   path: string;
@@ -27,6 +27,10 @@ const routes: IRouter[] = [
   {
     path: "/rentals",
     route: orderRouter,
+  },
+  {
+    path: "/",
+    route: publicRouter,
   },
 ];
 

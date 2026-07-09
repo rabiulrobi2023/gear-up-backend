@@ -10,7 +10,7 @@ model User {
 
   items Items[]
 
-  order Order[]
+  order Orders[]
 
   createdAt DateTime @default(now()) @db.Timestamptz
   updatedAt DateTime @updatedAt @db.Timestamptz
