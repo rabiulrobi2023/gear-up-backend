@@ -14,7 +14,7 @@ model Items {
   price Decimal @db.Decimal(10, 2)
 
   stock       Int
-  isAvailable Boolean
+  isAvailable Boolean @default(true)
   createdAt   DateTime @default(now()) @db.Timestamptz()
   updatedAt   DateTime @updatedAt @db.Timestamptz()
 

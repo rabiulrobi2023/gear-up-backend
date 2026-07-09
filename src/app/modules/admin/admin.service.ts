@@ -5,14 +5,14 @@ import { ICreateCategory } from "./admin.interface";
 
 const createCategoryIntoDB = async (payload: ICreateCategory) => {
   const name = payload.name.toLowerCase();
-  const isCategoryExists = await prisma.category.findUnique({
+  const isCategoryExists = await prisma.categories.findUnique({
     where: { name },
   });
 
   if (isCategoryExists) {
     throw new AppError(StatusCodes.CONFLICT, "Category already exists");
   }
-  const result = await prisma.category.create({ data: { name } });
+  const result = await prisma.categories.create({ data: { name } });
   return result;
 };
 
