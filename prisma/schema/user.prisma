@@ -10,6 +10,8 @@ model User {
 
   items Items[]
 
+  order Order[]
+
   createdAt DateTime @default(now()) @db.Timestamptz
   updatedAt DateTime @updatedAt @db.Timestamptz
 

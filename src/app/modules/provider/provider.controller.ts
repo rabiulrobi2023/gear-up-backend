@@ -14,7 +14,24 @@ const addItem = catchAsync(async (req, res, next) => {
     data: result,
   });
 });
+const updateItem = catchAsync(async (req, res, next) => {
+  const payload = req.body;
+  const providerId = req.user.id;
+  const itemId = req.params.itemId;
+  const result = await ProviderService.updateItem(
+    providerId,
+    itemId as string,
+    payload,
+  );
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Item updated successfully",
+    data: result,
+  });
+});
 
 export const ProviderController = {
-    addItem
+  addItem,
+  updateItem
 };

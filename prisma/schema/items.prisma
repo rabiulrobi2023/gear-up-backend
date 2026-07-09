@@ -11,10 +11,12 @@ model Items {
   categoryId String
   category   Categories @relation(fields: [categoryId], references: [id])
 
-  price Decimal @db.Decimal(10, 2)
+  price Decimal @db.Decimal(10,2)
+  stock Int
 
-  stock       Int
-  isAvailable Boolean @default(true)
+  order Order[]
+
+  isAvailable Boolean  @default(true)
   createdAt   DateTime @default(now()) @db.Timestamptz()
   updatedAt   DateTime @updatedAt @db.Timestamptz()
 

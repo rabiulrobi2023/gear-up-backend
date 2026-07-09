@@ -13,3 +13,11 @@ enum NodeEnv {
   DEVELOPMENT
   PRODUCTION
 }
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PICKED
+  RETURNED
+  CANCELLED
+}
