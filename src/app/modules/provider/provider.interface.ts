@@ -2,9 +2,9 @@ export interface IAddItem {
   name: string;
   brand?: string;
   description?: string;
-  images?: string;
+  image?: string;
   categoryId: string;
-  price: number;
+  dailyRate: number;
   stock: number;
   isAvailable?: boolean;
 }

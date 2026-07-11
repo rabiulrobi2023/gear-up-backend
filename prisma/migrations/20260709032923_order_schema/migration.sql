@@ -1,14 +1,14 @@
 /*
   Warnings:
 
-  - You are about to alter the column `price` on the `items` table. The data in that column could be lost. The data in that column will be cast from `DoublePrecision` to `Decimal(10,2)`.
+  - You are about to alter the column `dailyRate` on the `items` table. The data in that column could be lost. The data in that column will be cast from `DoublePrecision` to `Decimal(10,2)`.
 
 */
 -- CreateEnum
 CREATE TYPE "OrderStatus" AS ENUM ('PENDING', 'CONFIRMED', 'PICKED', 'RETURNED', 'CANCELLED');
 
 -- AlterTable
-ALTER TABLE "items" ALTER COLUMN "price" SET DATA TYPE DECIMAL(10,2);
+ALTER TABLE "items" ALTER COLUMN "dailyRate" SET DATA TYPE DECIMAL(10,2);
 
 -- CreateTable
 CREATE TABLE "orders" (
@@ -16,7 +16,7 @@ CREATE TABLE "orders" (
     "customerId" TEXT NOT NULL,
     "itemId" TEXT NOT NULL,
     "quantity" INTEGER NOT NULL,
-    "unitPrice" DECIMAL(10,2) NOT NULL,
+    "unitdailyRate" DECIMAL(10,2) NOT NULL,
     "totalAmount" DECIMAL(10,2) NOT NULL,
     "startDate" TIMESTAMPTZ NOT NULL,
     "returnDate" TIMESTAMPTZ NOT NULL,

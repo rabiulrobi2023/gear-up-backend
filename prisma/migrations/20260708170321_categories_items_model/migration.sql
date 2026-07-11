@@ -7,7 +7,7 @@ CREATE TABLE "items" (
     "images" TEXT,
     "providerId" TEXT NOT NULL,
     "categoryId" TEXT NOT NULL,
-    "price" DECIMAL(10,2) NOT NULL,
+    "dailyRate" DECIMAL(10,2) NOT NULL,
     "stock" INTEGER NOT NULL,
     "isAvailable" BOOLEAN NOT NULL,
     "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,

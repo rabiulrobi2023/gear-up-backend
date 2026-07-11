@@ -15,8 +15,8 @@ const getAllGearFromDB = async (query: IItemQueryInput) => {
     sortBy,
     sortOrder,
     categoryName,
-    minPrice,
-    maxPrice,
+    minRate,
+    maxRate,
     ...queryFilter
   } = query;
 
@@ -29,11 +29,11 @@ const getAllGearFromDB = async (query: IItemQueryInput) => {
     andConditions.push(buildFilterableField(queryFilter, itemfilterableFields));
   }
 
-  if (minPrice) {
-    andConditions.push({ price: { gte: minPrice } });
+  if (minRate) {
+    andConditions.push({ dailyRate: { gte: minRate } });
   }
-  if (maxPrice) {
-    andConditions.push({ price: { lte: maxPrice } });
+  if (maxRate) {
+    andConditions.push({ dailyRate: { lte: maxRate } });
   }
 
   if (categoryName) {

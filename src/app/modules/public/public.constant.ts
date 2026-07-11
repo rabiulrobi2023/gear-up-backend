@@ -1,10 +1,9 @@
 export const itemfilterableFields: string[] = [
   "category",
-  "minPrice",
-  "maxPrice",
+  "minRate",
+  "maxRate",
   "brand",
   "isAvailable",
-
 ];
 
 export const itemSearchableFields: string[] = ["name", "description", "brand"];
