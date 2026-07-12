@@ -11,9 +11,10 @@ model Orders {
     dailyRate     Decimal     @db.Decimal(10, 2)
     totalDays Int @default(1)
     totalAmount   Decimal     @db.Decimal(10, 2)
+    status        OrderStatus @default(PENDING)
+    expireAt DateTime @db.Timestamptz()
     startDate     DateTime    @db.Timestamptz()
     returnDate    DateTime    @db.Timestamptz()
-    status        OrderStatus @default(PENDING)
 
     createdAt DateTime @default(now()) @db.Timestamptz()
     updatedAt DateTime @updatedAt @db.Timestamptz()

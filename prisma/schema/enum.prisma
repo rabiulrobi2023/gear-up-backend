@@ -21,3 +21,14 @@ enum OrderStatus {
   RETURNED
   CANCELLED
 }
+
+
+enum PaymentStatus {
+  PAID
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CARD
+  BANK
+}

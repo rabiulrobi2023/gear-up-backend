@@ -10,7 +10,6 @@ const createCheckoutSession = async (customerId: string, orderId: string) => {
     where: {
       id: orderId,
       customerId,
-      status: "PENDING",
     },
     include: {
       customer: {
@@ -25,6 +24,14 @@ const createCheckoutSession = async (customerId: string, orderId: string) => {
   if (!order) {
     throw new AppError(StatusCodes.NOT_FOUND, "Order not found");
   }
+
+  if (order.status !== "PENDING") {
+    throw new AppError(
+      StatusCodes.NOT_FOUND,
+      "This order is not available for payment.",
+    );
+  }
+
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     mode: "payment",
@@ -32,7 +39,7 @@ const createCheckoutSession = async (customerId: string, orderId: string) => {
     line_items: [
       {
         price_data: {
-          currency: "BDT",
+          currency: "bdt",
           unit_amount: Number(order.dailyRate) * order.totalDays * 100,
           product_data: {
             name: order.item.name,
@@ -62,11 +69,8 @@ const handleStripeWebhookEvent = async (payload: Buffer, signature: string) => {
       const session = event.data.object;
       const orderId = session.metadata?.orderId;
 
-      console.log(orderId)
-      console.log(session.payment_status)
-
       if (session.payment_status != "paid") {
-        break;
+        return;
       }
       if (!orderId) {
         throw new AppError(
@@ -74,6 +78,13 @@ const handleStripeWebhookEvent = async (payload: Buffer, signature: string) => {
           "Missing order id in session metadata",
         );
       }
+
+      const paymentIntent = await stripe.paymentIntents.retrieve(
+        session.payment_intent as string,
+        {
+          expand: ["payment_method"],
+        },
+      );
       await prisma.orders.update({
         where: { id: orderId },
         data: {
@@ -87,6 +98,10 @@ const handleStripeWebhookEvent = async (payload: Buffer, signature: string) => {
       console.log(`Unhandled event type: ${event.type}`);
   }
 };
+
+// const getPayments = async()=>{
+//   const result  = await prisma.orders
+// }
 
 export const PaymentService = {
   createCheckoutSession,

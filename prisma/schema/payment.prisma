@@ -1,0 +1,10 @@
+model Payments {
+    id String @id @default(uuid())
+    orderId String @unique
+    gatewayTransactionId String @unique
+    amount Decimal @db.Decimal(10,2)
+    status PaymentStatus
+    method PaymentMethod
+    createdAt DateTime @db.Timestamptz()
+    updatedAt DateTime @db.Timestamptz()
+}

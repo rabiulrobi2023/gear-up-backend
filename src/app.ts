@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import router from "./app/router";
 import notFoundRoute from "./app/middlewares/notFoundRoute";
 import globalErrorHandler from "./app/middlewares/globalErrorHandler";
+import { PaymentController } from "./app/modules/payment/payment.controller";
 
 const app: Application = express();
 app.use(
@@ -14,7 +15,11 @@ app.use(
   }),
 );
 
-app.use("/api/payments/confirm", express.raw({ type: "application/json" }));
+app.post(
+  "/api/payments/confirm",
+  express.raw({ type: "application/json" }),
+  PaymentController.handleStripeWebhook,
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
