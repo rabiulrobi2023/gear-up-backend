@@ -13,6 +13,15 @@ const createCategory = catchAsync(async (req, res) => {
   });
 });
 
+const getAllUsers = catchAsync(async (req, res, next) => {
+  const result = await AdminService.getAllUser(req.query);
+    sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Users retrieved successfully",
+    data: result,
+  });
+});
+
 export const AdminController = {
-  createCategory,
+  createCategory,getAllUsers
 };
