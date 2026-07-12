@@ -1,7 +1,12 @@
 import { StatusCodes } from "http-status-codes";
 import { prisma } from "../../lib/prisma";
 import AppError from "../../utils/AppError";
-import { IAddItem } from "./provider.interface";
+import {
+  IAddItem,
+  IUpdateItem,
+  IUpdateOrderStatus,
+} from "./provider.interface";
+import { OrderStatus } from "../../../../generated/prisma/enums";
 
 const addItem = async (providerId: string, payload: IAddItem) => {
   const isCategoryExists = await prisma.categories.findUnique({
@@ -13,7 +18,11 @@ const addItem = async (providerId: string, payload: IAddItem) => {
   }
 
   const result = await prisma.items.create({
-    data: { ...payload, providerId },
+    data: {
+      ...payload,
+      providerId,
+      isAvailable: payload.stock > 0 ? true : false,
+    },
     include: {
       category: true,
     },
@@ -23,9 +32,9 @@ const addItem = async (providerId: string, payload: IAddItem) => {
 };
 
 const updateItem = async (
-  providerId: string,
   itemId: string,
-  payload: IAddItem,
+  providerId: string,
+  payload: IUpdateItem,
 ) => {
   const isItemExist = await prisma.items.findUnique({
     where: {
@@ -48,10 +57,45 @@ const updateItem = async (
 
   const result = await prisma.items.update({
     where: { id: itemId },
-    data: payload,
+    data: { ...payload, isAvailable: payload.stock === 0 ? false : true },
     include: { category: { select: { name: true } } },
   });
 
+  return result;
+};
+
+const getMyIncomingOrdersFromDB = async (providerId: string) => {
+  const result = await prisma.orders.findMany({
+    where: {
+      status: { in: [OrderStatus.PENDING, OrderStatus.CONFIRMED] },
+      item: { providerId },
+    },
+  });
+
+  return result;
+};
+
+const updateOrderStatusIntoDB = async (
+  orderId: string,
+  payload: IUpdateOrderStatus,
+) => {
+  const order = await prisma.orders.findUnique({ where: { id: orderId } });
+  if (!order) {
+    throw new AppError(StatusCodes.NOT_FOUND, "Order not found");
+  }
+
+  if (order?.status === OrderStatus.CANCELLED) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "The order is cancelled");
+  }
+
+  if (order.status === OrderStatus.RETURNED) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Gear already returned");
+  }
+
+  const result = await prisma.orders.update({
+    where: { id: orderId },
+    data: payload,
+  });
   return result;
 };
 
@@ -76,5 +120,7 @@ const deleteGearFromDB = async (id: string) => {
 export const ProviderService = {
   addItem,
   updateItem,
+  getMyIncomingOrdersFromDB,
   deleteGearFromDB,
+  updateOrderStatusIntoDB,
 };

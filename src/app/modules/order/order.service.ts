@@ -19,7 +19,6 @@ const createOrderFromDB = async (customerId: string, payload: ICreateOrder) => {
     );
   }
 
-
   if (isItemExists.stock < payload.quantity) {
     throw new AppError(
       StatusCodes.UNPROCESSABLE_ENTITY,
@@ -79,12 +78,32 @@ const createOrderFromDB = async (customerId: string, payload: ICreateOrder) => {
   return result;
 };
 
-const getOrdersFromDB = async (id: string) => {
-  const result = await prisma.orders.findMany();
+const getAllOrdersFromDB = async (customerId: string) => {
+  const result = await prisma.orders.findMany({
+    where: { customerId: customerId },
+    include: { item: true },
+  });
+  return result;
+};
+
+export const getSingleOrderFromDB = async (
+  customerId: string,
+  orderId: string,
+) => {
+  const result = await prisma.orders.findUnique({
+    where: { customerId, id: orderId },
+    include: { item: true },
+  });
+
+  if (!result) {
+    throw new AppError(StatusCodes.NOT_FOUND, "Order not found");
+  }
+
   return result;
 };
 
 export const OrderService = {
   createOrderFromDB,
-  getOrdersFromDB,
+  getAllOrdersFromDB,
+  getSingleOrderFromDB,
 };

@@ -16,18 +16,47 @@ const addItem = catchAsync(async (req, res, next) => {
 });
 
 const updateItem = catchAsync(async (req, res, next) => {
-  const payload = req.body;
-  const providerId = req.user.id;
   const itemId = req.params.itemId;
+  const providerId = req.user.id;
+  const payload = req.body;
   const result = await ProviderService.updateItem(
-    providerId,
     itemId as string,
+    providerId,
     payload,
   );
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,
-    message: "Item updated successfully",
+    message: "Gear updated successfully",
+    data: result,
+  });
+});
+
+const getMyIncomingOrder = catchAsync(async (req, res, next) => {
+  const providerId = req.params.id;
+  const result = await ProviderService.getMyIncomingOrdersFromDB(
+    providerId as string,
+  );
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Order retrieved successfully",
+    data: result,
+  });
+});
+
+const updateOrderStatus = catchAsync(async (req, res, next) => {
+  const orderId = req.params.id;
+  const payload = req.body;
+
+  const result = await ProviderService.updateOrderStatusIntoDB(
+    orderId as string,
+    payload,
+  );
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Order status updated successfully",
     data: result,
   });
 });
@@ -47,4 +76,6 @@ export const ProviderController = {
   addItem,
   updateItem,
   deleteGear,
+  getMyIncomingOrder,
+  updateOrderStatus,
 };
