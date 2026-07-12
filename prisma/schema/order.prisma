@@ -16,6 +16,7 @@ model Orders {
     startDate     DateTime    @db.Timestamptz()
     returnDate    DateTime    @db.Timestamptz()
 
+    payment Payments?
     createdAt DateTime @default(now()) @db.Timestamptz()
     updatedAt DateTime @updatedAt @db.Timestamptz()
 

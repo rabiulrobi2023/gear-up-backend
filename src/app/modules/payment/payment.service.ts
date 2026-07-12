@@ -4,6 +4,7 @@ import AppError from "../../utils/AppError";
 import { stripe } from "../../lib/stripe";
 import config from "../../config";
 import Stripe from "stripe";
+import { PaymentMethod } from "../../../../generated/prisma/enums";
 
 const createCheckoutSession = async (customerId: string, orderId: string) => {
   const order = await prisma.orders.findUnique({
@@ -32,6 +33,13 @@ const createCheckoutSession = async (customerId: string, orderId: string) => {
     );
   }
 
+  if (order.expireAt < new Date()) {
+    throw new AppError(
+      StatusCodes.GONE,
+      "The order has expired. Please make a new order",
+    );
+  }
+
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     mode: "payment",
@@ -51,6 +59,7 @@ const createCheckoutSession = async (customerId: string, orderId: string) => {
     metadata: { orderId, itemId: order.item.id },
     success_url: config.STRIPE_PAYMENT_SUCCESS_URL,
     cancel_url: config.STRIPE_PAYMENT_CANCEL_URL,
+    expires_at: Math.floor((Date.now() + 30 * 60 * 1000) / 1000),
   });
 
   return session.url;
@@ -66,12 +75,14 @@ const handleStripeWebhookEvent = async (payload: Buffer, signature: string) => {
 
   switch (event.type) {
     case "checkout.session.completed": {
-      const session = event.data.object;
+      const session = event.data.object as Stripe.Checkout.Session;
       const orderId = session.metadata?.orderId;
+      const gatewayTransactionId = session.payment_intent as string;
 
-      if (session.payment_status != "paid") {
+      if (session.payment_status !== "paid") {
         return;
       }
+
       if (!orderId) {
         throw new AppError(
           StatusCodes.NOT_FOUND,
@@ -80,16 +91,46 @@ const handleStripeWebhookEvent = async (payload: Buffer, signature: string) => {
       }
 
       const paymentIntent = await stripe.paymentIntents.retrieve(
-        session.payment_intent as string,
+        gatewayTransactionId,
         {
           expand: ["payment_method"],
         },
       );
-      await prisma.orders.update({
-        where: { id: orderId },
-        data: {
-          status: "CONFIRMED",
-        },
+
+      const stripeMethod = paymentIntent.payment_method as Stripe.PaymentMethod;
+
+      let method: PaymentMethod;
+
+      switch (stripeMethod.type) {
+        case "card":
+          method = PaymentMethod.CARD;
+          break;
+        case "us_bank_account":
+        case "sepa_debit":
+        case "bacs_debit":
+          method = PaymentMethod.BANK;
+          break;
+        default:
+          throw new Error("Unsupported payment method");
+      }
+
+      prisma.$transaction(async (tx) => {
+        await tx.orders.update({
+          where: { id: orderId },
+          data: {
+            status: "CONFIRMED",
+          },
+        });
+
+        await tx.payments.create({
+          data: {
+            orderId,
+            gatewayTransactionId,
+            amount: Number(session.amount_total) / 100,
+            status: "PAID",
+            method,
+          },
+        });
       });
 
       break;
@@ -99,11 +140,35 @@ const handleStripeWebhookEvent = async (payload: Buffer, signature: string) => {
   }
 };
 
-// const getPayments = async()=>{
-//   const result  = await prisma.orders
-// }
+const getAllPaymentsFromDB = async () => {
+  const result = await prisma.payments.findMany({
+    include: {
+      order: {
+        include: { customer: { omit: { password: true } }, item: true },
+      },
+    },
+  });
+  return result;
+};
+
+const getSinglePaymentsByIdFromDB = async (id: string) => {
+  const result = await prisma.payments.findUnique({
+    where: { id },
+    include: {
+      order: {
+        include: { customer: { omit: { password: true } }, item: true },
+      },
+    },
+  });
+  if (!result) {
+    throw new AppError(StatusCodes.NOT_FOUND, "Payment not found");
+  }
+  return result;
+};
 
 export const PaymentService = {
   createCheckoutSession,
   handleStripeWebhookEvent,
+  getAllPaymentsFromDB,
+  getSinglePaymentsByIdFromDB,
 };

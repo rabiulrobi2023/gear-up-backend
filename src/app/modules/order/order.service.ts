@@ -19,6 +19,7 @@ const createOrderFromDB = async (customerId: string, payload: ICreateOrder) => {
     );
   }
 
+
   if (isItemExists.stock < payload.quantity) {
     throw new AppError(
       StatusCodes.UNPROCESSABLE_ENTITY,
@@ -52,12 +53,10 @@ const createOrderFromDB = async (customerId: string, payload: ICreateOrder) => {
     1,
   );
 
-  const dailyRate = Number(isItemExists.dailyRate);
-
-  const totalAmount = dailyRate * payload.quantity * days;
-  console.log(totalAmount);
-
   const result = await prisma.$transaction(async (tx) => {
+    const dailyRate = Number(isItemExists.dailyRate);
+    const totalAmount = dailyRate * payload.quantity * days;
+    const expireAt = new Date(Date.now() + 1 * 60 * 60 * 1000);
     const newStock = isItemExists.stock - Number(payload.quantity);
 
     await tx.items.update({
@@ -66,7 +65,14 @@ const createOrderFromDB = async (customerId: string, payload: ICreateOrder) => {
     });
 
     return await tx.orders.create({
-      data: { ...payload, dailyRate, totalAmount, customerId, totalDays: days },
+      data: {
+        ...payload,
+        dailyRate,
+        totalAmount,
+        customerId,
+        totalDays: days,
+        expireAt,
+      },
     });
   });
 

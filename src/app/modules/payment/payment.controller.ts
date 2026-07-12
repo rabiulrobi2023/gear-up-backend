@@ -26,8 +26,6 @@ const handleStripeWebhook = catchAsync(async (req, res) => {
     throw new AppError(StatusCodes.BAD_REQUEST, "Missing Stripe signature.");
   }
 
-  throw Error("Error pushed")
-
   await PaymentService.handleStripeWebhookEvent(req.body, signature as string);
 
   sendResponse(res, {
@@ -37,4 +35,33 @@ const handleStripeWebhook = catchAsync(async (req, res) => {
   });
 });
 
-export const PaymentController = { createCheckoutSession, handleStripeWebhook };
+const getAllPayments = catchAsync(async (req, res, next) => {
+  const result = await PaymentService.getAllPaymentsFromDB();
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message:
+      result.length > 0
+        ? "Payments retrieved successfully"
+        : "There is no any payments",
+    data: result,
+  });
+});
+
+const getSinglePaymentById = catchAsync(async (req, res, next) => {
+  const paymentId = req.params.id;
+  const result = await PaymentService.getSinglePaymentsByIdFromDB(
+    paymentId as string,
+  );
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Payment retrieved successfully",
+    data: result,
+  });
+});
+
+export const PaymentController = {
+  createCheckoutSession,
+  handleStripeWebhook,
+  getAllPayments,
+  getSinglePaymentById,
+};

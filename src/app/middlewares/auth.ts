@@ -6,8 +6,9 @@ import config from "../config";
 import { prisma } from "../lib/prisma";
 import { verifyJwtToken } from "../utils/jwt";
 import { IJwtPayload } from "../interface/interface";
+import { Role } from "../../../generated/prisma/enums";
 
-const auth = (...roles: string[]) => {
+const auth = (...roles: Role[]) => {
   return catchAsync(async (req, res, next) => {
     const accessToken =
       req.cookies.accessToken ||
