@@ -4,18 +4,31 @@ import AppError from "../utils/AppError";
 import jwt from "jsonwebtoken";
 import { NodeEnv, Prisma } from "../../../generated/prisma/client";
 import config from "../config";
+import { ZodError } from "zod";
+import { IErrorSource } from "../interface/interface";
 
 const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
-  console.log(error)
-    let statusCode =
+
+  let statusCode =
     typeof error?.statusCode === "number"
       ? error.statusCode
       : StatusCodes.INTERNAL_SERVER_ERROR;
   let message = error instanceof Error ? error.message : "Something went wrong";
+  let source: IErrorSource[] = [];
 
   if (error instanceof AppError) {
     statusCode = error.statusCode;
     message = error.message;
+  } else if (error instanceof ZodError) {
+    statusCode = StatusCodes.BAD_REQUEST;
+    message = "Zod validation error";
+
+    error.issues?.forEach((issue) => {
+      source.push({
+        path: issue?.path[0] as string,
+        message: issue?.message,
+      });
+    });
   } else if (error instanceof jwt.TokenExpiredError) {
     statusCode = StatusCodes.UNAUTHORIZED;
     message = "Token has expired";
@@ -49,7 +62,7 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
 
       case "P2004":
         statusCode = StatusCodes.BAD_REQUEST;
-        message = "A database constaint failed";
+        message = "A database constraint failed";
         break;
 
       case "P2005":
@@ -147,10 +160,10 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
     success: false,
     statusCode,
     message,
+    source: source.length > 0 ? source : "",
     // stack: config.NODE_ENV === NodeEnv.DEVELOPMENT ? error.stack : undefined,
     error: config.NODE_ENV === NodeEnv.DEVELOPMENT ? error : undefined,
   });
 };
 
-
-export default globalErrorHandler
+export default globalErrorHandler;

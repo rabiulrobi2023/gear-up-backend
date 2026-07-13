@@ -32,7 +32,6 @@ const loginUser = catchAsync(async (req, res, next) => {
 });
 
 const getMe = catchAsync(async (req, res, next) => {
-  console.log(req.user);
   const id = req.user?.id;
   const result = await AuthService.getMeFromDB(id);
   sendResponse(res, {
