@@ -16,3 +16,6 @@ export interface IUserWhereInput extends UserWhereInput {
   sortBy?: string;
   sortOrder?: string;
 }
+
+
+

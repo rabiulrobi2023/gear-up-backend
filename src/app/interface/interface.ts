@@ -12,7 +12,7 @@ export interface IPaginationOptions {
   page: string | number;
   limit: string | number;
   sortBy: string;
-  sortOrder: string;
+  sortOrder:"asc"|"desc";
 }
 
 export interface IPagination {
@@ -20,7 +20,7 @@ export interface IPagination {
   limit: number;
   skip: number;
   sortBy: string;
-  sortOrder: string;
+  sortOrder: "asc"|"desc";
 }
 
 export interface IMetaData {

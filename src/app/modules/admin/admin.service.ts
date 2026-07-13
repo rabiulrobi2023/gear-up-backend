@@ -10,8 +10,13 @@ import {
 import calculatePagination from "../../utils/calculatePagination";
 import { IMetaData, IPaginationOptions } from "../../interface/interface";
 import buildSearchCondition from "../../utils/buildSearchCondition";
-import { userSearchableFields } from "./admin.constant";
+import {
+  userSearchableEnumAndNumericField,
+  userSearchableFields,
+} from "./admin.constant";
 import { UserWhereInput } from "../../../../generated/prisma/models";
+import { IItemQueryInput } from "../public/public.interface";
+import { UserStatus } from "../../../../generated/prisma/enums";
 
 const createCategoryIntoDB = async (payload: ICreateCategory) => {
   const name = payload.name.toLowerCase();
@@ -39,9 +44,12 @@ const getAllUser = async (query: IUserWhereInput) => {
   const andConditions: UserWhereInput[] = [];
 
   if (searchTerm?.trim()) {
-    const searchCondition = <UserWhereInput>(
-      buildSearchCondition(searchTerm.trim(), userSearchableFields)
+    const searchCondition = buildSearchCondition<UserWhereInput>(
+      searchTerm.trim(),
+      userSearchableFields,
+      userSearchableEnumAndNumericField,
     );
+
     andConditions.push(searchCondition);
   }
 
@@ -71,17 +79,47 @@ const getAllUser = async (query: IUserWhereInput) => {
   };
 };
 
-const updateUser = async (id: string, payload: IUpdateUserStatus) => {
+const getAllOrder = async () => {
+  const result = await prisma.orders.findMany();
+  return result;
+};
+
+const updateUserStatus = async (
+  id: string,
+  selfId: string,
+  payload: IUpdateUserStatus,
+) => {
+  const user = await prisma.user.findUnique({ where: { id } });
+  if (!user) {
+    throw new AppError(StatusCodes.NOT_FOUND, "User not found");
+  }
+
+  if (user.status === payload.status) {
+    throw new AppError(StatusCodes.CONFLICT, `User already ${payload.status}`);
+  }
+
+  if (id === selfId) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "You cannot cancel your own account",
+    );
+  }
+
   const result = await prisma.user.update({
     where: {
       id,
     },
     data: payload,
+    omit: {
+      password: true,
+    },
   });
+  return result;
 };
 
 export const AdminService = {
   createCategoryIntoDB,
   getAllUser,
-  updateUser,
+  getAllOrder,
+  updateUserStatus,
 };

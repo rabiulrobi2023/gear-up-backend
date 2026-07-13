@@ -1,3 +1,4 @@
+import { IPaginationOptions } from "./../../interface/interface";
 import { StatusCodes } from "http-status-codes";
 import { ItemsWhereInput } from "../../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
@@ -6,6 +7,7 @@ import buildFilterableField from "../../utils/buildFilterableField";
 import buildSearchCondition from "../../utils/buildSearchCondition";
 import { itemfilterableFields, itemSearchableFields } from "./public.constant";
 import { IItemQueryInput } from "./public.interface";
+import calculatePagination from "../../utils/calculatePagination";
 
 const getAllGearFromDB = async (query: IItemQueryInput) => {
   const {
@@ -21,6 +23,12 @@ const getAllGearFromDB = async (query: IItemQueryInput) => {
   } = query;
 
   const andConditions: ItemsWhereInput[] = [];
+  const pagination = calculatePagination({
+    page,
+    limit,
+    sortBy,
+    sortOrder,
+  } as IPaginationOptions);
 
   if (searchTerm?.trim()) {
     andConditions.push(buildSearchCondition(searchTerm, itemSearchableFields));
@@ -46,8 +54,21 @@ const getAllGearFromDB = async (query: IItemQueryInput) => {
       category: true,
       provider: { select: { name: true, email: true, phone: true } },
     },
+    skip: pagination.skip,
+    take: pagination.limit,
+    orderBy: { [pagination.sortBy]: pagination.sortOrder },
   });
-  return result;
+
+  const total = await prisma.items.count({ where: { AND: andConditions } });
+  return {
+    result,
+    metaData: {
+      page: pagination.page,
+      limit: pagination.limit,
+      total,
+      totalPage: Math.ceil(total / pagination.limit),
+    },
+  };
 };
 
 const getSingleGearFromDB = async (itemId: string) => {
