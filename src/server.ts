@@ -3,8 +3,8 @@ import config from "./app/config";
 import { prisma } from "./app/lib/prisma";
 
 async function main() {
+  const port = config.PORT;
   try {
-    const port = config.PORT;
     await prisma.$connect();
     console.log("Postgres database connected successfully");
     app.listen(port, () =>
