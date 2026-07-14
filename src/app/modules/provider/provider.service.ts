@@ -79,7 +79,10 @@ const updateOrderStatusIntoDB = async (
   orderId: string,
   payload: IUpdateOrderStatus,
 ) => {
-  const order = await prisma.orders.findUnique({ where: { id: orderId } });
+  const order = await prisma.orders.findUnique({
+    where: { id: orderId },
+    include: { item: true },
+  });
   if (!order) {
     throw new AppError(StatusCodes.NOT_FOUND, "Order not found");
   }
@@ -90,6 +93,24 @@ const updateOrderStatusIntoDB = async (
 
   if (order.status === OrderStatus.RETURNED) {
     throw new AppError(StatusCodes.BAD_REQUEST, "Gear already returned");
+  }
+
+  if (payload.status === OrderStatus.CANCELLED) {
+    await prisma.$transaction(async (tx) => {
+      const existingStock = order.item.stock;
+      const orderedQuantity = order.quantity;
+      const newStock = existingStock + orderedQuantity;
+
+      const updateOrder = await tx.orders.update({
+        where: { id: orderId },
+        data: payload,
+      });
+      await tx.items.update({
+        where: { id: order.itemId },
+        data: { stock: newStock },
+      });
+      return updateOrder;
+    });
   }
 
   const result = await prisma.orders.update({
