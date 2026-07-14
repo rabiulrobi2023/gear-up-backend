@@ -61,7 +61,7 @@ const getAllGearFromDB = async (query: IItemQueryInput) => {
 
   const total = await prisma.items.count({ where: { AND: andConditions } });
   return {
-    result,
+    data: result,
     metaData: {
       page: pagination.page,
       limit: pagination.limit,

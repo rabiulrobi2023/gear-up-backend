@@ -3,13 +3,14 @@ import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { PublicService } from "./public.service";
 
-
 const getAllGear = catchAsync(async (req, res, next) => {
   const result = await PublicService.getAllGearFromDB(req.query);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message:
-      result.length > 0 ? "Gears retrieved successfully" : "No items found",
+      result.data.length > 0
+        ? "Gears retrieved successfully"
+        : "No items found",
     data: result,
   });
 });
