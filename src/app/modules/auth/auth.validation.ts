@@ -2,7 +2,10 @@ import z, { email } from "zod";
 import { Role } from "../../../../generated/prisma/enums";
 
 export const registerUserValidationSchema = z.object({
-  name: z.string({ error: "Name is required" }),
+  name: z
+    .string({ error: "Name is required" })
+    .trim()
+    .min(3, "Name at least 3 character long"),
   email: z.email("Email is required"),
   password: z
     .string("Password is required")
