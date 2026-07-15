@@ -22,7 +22,6 @@ enum OrderStatus {
   CANCELLED
 }
 
-
 enum PaymentStatus {
   PAID
   REFUNDED

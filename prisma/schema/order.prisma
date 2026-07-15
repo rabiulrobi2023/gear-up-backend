@@ -7,16 +7,18 @@ model Orders {
     itemId String
     item   Items  @relation(fields: [itemId], references: [id])
 
-    quantity      Int
-    dailyRate     Decimal     @db.Decimal(10, 2)
-    totalDays Int @default(1)
-    totalAmount   Decimal     @db.Decimal(10, 2)
-    status        OrderStatus @default(PENDING)
-    expireAt DateTime @db.Timestamptz()
-    startDate     DateTime    @db.Timestamptz()
-    returnDate    DateTime    @db.Timestamptz()
+    quantity    Int
+    dailyRate   Decimal     @db.Decimal(10, 2)
+    totalDays   Int         @default(1)
+    totalAmount Decimal     @db.Decimal(10, 2)
+    status      OrderStatus @default(PENDING)
+    expireAt    DateTime    @db.Timestamptz()
+    startDate   DateTime    @db.Timestamptz()
+    returnDate  DateTime    @db.Timestamptz()
 
     payment Payments?
+
+    review    Reviews?
     createdAt DateTime @default(now()) @db.Timestamptz()
     updatedAt DateTime @updatedAt @db.Timestamptz()
 

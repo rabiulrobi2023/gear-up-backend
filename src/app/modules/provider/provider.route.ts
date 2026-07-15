@@ -17,15 +17,19 @@ router.post(
   ProviderController.addItem,
 );
 router.get("/orders", ProviderController.getMyIncomingOrder);
+
 router.put(
   "/gear/:itemId",
   auth(Role.PROVIDER),
   validationRequest(updateItemValidationSchema),
   ProviderController.updateItem,
 );
+
 router.delete("/gear/:id", ProviderController.deleteGear);
+
 router.patch(
   "/orders/:id",
+  auth(Role.PROVIDER),
   validationRequest(updateOrderStatusSchema),
   ProviderController.updateOrderStatus,
 );

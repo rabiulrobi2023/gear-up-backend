@@ -95,7 +95,10 @@ const updateOrderStatusIntoDB = async (
     throw new AppError(StatusCodes.BAD_REQUEST, "Gear already returned");
   }
 
-  if (payload.status === OrderStatus.CANCELLED) {
+  if (
+    payload.status === OrderStatus.CANCELLED ||
+    payload.status === OrderStatus.RETURNED
+  ) {
     await prisma.$transaction(async (tx) => {
       const existingStock = order.item.stock;
       const orderedQuantity = order.quantity;

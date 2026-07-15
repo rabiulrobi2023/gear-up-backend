@@ -66,7 +66,7 @@ const createCheckoutSession = async (customerId: string, orderId: string) => {
 };
 
 const handleStripeWebhookEvent = async (payload: Buffer, signature: string) => {
-  const webhookSecret = config.STRIPE_WEBHOOK_SECRET;
+  const webhookSecret = config.STRIPE_WEBHOOK_SECRET as string;
   const event = stripe.webhooks.constructEvent(
     payload,
     signature,
@@ -114,7 +114,7 @@ const handleStripeWebhookEvent = async (payload: Buffer, signature: string) => {
           throw new Error("Unsupported payment method");
       }
 
-      prisma.$transaction(async (tx) => {
+      await prisma.$transaction(async (tx) => {
         await tx.orders.update({
           where: { id: orderId },
           data: {
@@ -144,7 +144,16 @@ const getAllPaymentsFromDB = async () => {
   const result = await prisma.payments.findMany({
     include: {
       order: {
-        include: { customer: { omit: { password: true } }, item: true },
+        include: {
+          customer: { select: { name: true, email: true } },
+          item: {
+            select: {
+              name: true,
+              brand: true,
+              category: { select: { name: true } },
+            },
+          },
+        },
       },
     },
   });
@@ -156,7 +165,16 @@ const getSinglePaymentsByIdFromDB = async (id: string) => {
     where: { id },
     include: {
       order: {
-        include: { customer: { omit: { password: true } }, item: true },
+        include: {
+          customer: { omit: { password: true } },
+          item: {
+            select: {
+              name: true,
+              brand: true,
+              provider: { select: { name: true } },
+            },
+          },
+        },
       },
     },
   });

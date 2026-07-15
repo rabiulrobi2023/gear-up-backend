@@ -5,6 +5,7 @@ import { providerRouter } from "../modules/provider/provider.route";
 import { orderRouter } from "../modules/order/order.route";
 import { publicRouter } from "../modules/public/public.route";
 import { paymentRoute } from "../modules/payment/payment.route";
+import { reviewRouter } from "../modules/review/review.route";
 
 interface IRouter {
   path: string;
@@ -36,6 +37,10 @@ const routes: IRouter[] = [
   {
     path: "/payments",
     route: paymentRoute,
+  },
+  {
+    path: "/",
+    route: reviewRouter,
   },
 ];
 

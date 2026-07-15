@@ -12,6 +12,8 @@ model User {
 
   order Orders[]
 
+  reviews Reviews[]
+
   createdAt DateTime @default(now()) @db.Timestamptz
   updatedAt DateTime @updatedAt @db.Timestamptz
 

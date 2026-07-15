@@ -1,13 +1,13 @@
 model Payments {
-    id String @id @default(uuid())
-    orderId String @unique
-    order Orders @relation(fields: [orderId], references: [id])
-    gatewayTransactionId String @unique
-    amount Decimal @db.Decimal(10,2)
-    status PaymentStatus
-    method PaymentMethod
-    createdAt DateTime @db.Timestamptz() @default(now())
-    updatedAt DateTime @db.Timestamptz() @updatedAt
+    id                   String        @id @default(uuid())
+    orderId              String        @unique
+    order                Orders        @relation(fields: [orderId], references: [id])
+    gatewayTransactionId String        @unique
+    amount               Decimal       @db.Decimal(10, 2)
+    status               PaymentStatus
+    method               PaymentMethod
+    createdAt            DateTime      @default(now()) @db.Timestamptz()
+    updatedAt            DateTime      @updatedAt @db.Timestamptz()
 
     @@map("payments")
 }

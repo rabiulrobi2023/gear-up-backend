@@ -3,7 +3,7 @@ model Items {
   name        String
   brand       String?
   description String?
-  image      String?
+  image       String?
 
   providerId String
   provider   User   @relation(fields: [providerId], references: [id])
@@ -11,10 +11,12 @@ model Items {
   categoryId String
   category   Categories @relation(fields: [categoryId], references: [id])
 
-  dailyRate Decimal @db.Decimal(10,2)
-  stock Int
+  dailyRate Decimal @db.Decimal(10, 2)
+  stock     Int
 
   order Orders[]
+
+  reviews Reviews[]
 
   isAvailable Boolean  @default(true)
   createdAt   DateTime @default(now()) @db.Timestamptz()
