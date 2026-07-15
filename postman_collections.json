@@ -1,0 +1,830 @@
+{
+  "info": {
+    "_postman_id": "7ad7398f-0cb4-44d3-8192-1bac7f426d93",
+    "name": "Assignment 4",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "46096326",
+    "_collection_link": "https://go.postman.co/collection/46096326-7ad7398f-0cb4-44d3-8192-1bac7f426d93?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Customer One\",\r\n    \"email\": \"customer1@gmail.com\",\r\n    \"password\": \"111111\",\r\n    \"role\": \"CUSTOMER\",\r\n    \"phone\": \"01700000001\",\r\n    \"address\": \"Dinajpur Sadar, Dinajpur\"\r\n}\r\n\r\n\r\n// {\r\n//     \"name\": \"Provider One\",\r\n//     \"email\": \"provider1@gmail.com\",\r\n//     \"password\": \"111111\",\r\n//     \"role\": \"PROVIDER\",\r\n//     \"phone\": \"01700000002\",\r\n//     \"address\": \"Bogura Sadar, Bogura\"\r\n// }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{gear-up-base_api}}/api/auth/register",
+              "host": [
+                "{{gear-up-base_api}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"customer1@gmail.com\",\r\n    \"password\": \"111111\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{gear-up-base_api}}/api/auth/login",
+              "host": [
+                "{{gear-up-base_api}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Me",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gear-up-base_api}}/api/auth/me",
+              "host": [
+                "{{gear-up-base_api}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Provider",
+      "item": [
+        {
+          "name": "Add Gear",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Coleman Sundome 4-Person Tent\",\r\n    \"brand\": \"Coleman\",\r\n    \"description\": \"Spacious waterproof tent suitable for family camping.\",\r\n    \"image\": \"https://images.unsplash.com/photo-1504280390368-397dc1e9d88b\",\r\n    \"categoryId\": \"fced00a4-3976-40a9-a76b-a26a8dbbf6f1\",\r\n    \"dailyRate\": 25,\r\n    \"stock\": 10\r\n}\r\n\r\n//   {\r\n//     \"name\": \"Coleman Sundome 4-Person Tent\",\r\n//     \"brand\": \"Coleman\",\r\n//     \"description\": \"Spacious waterproof tent suitable for family camping.\",\r\n//     \"image\": \"https://images.unsplash.com/photo-1504280390368-397dc1e9d88b\",\r\n//     \"categoryId\": \"c890091a-4f26-4d56-ad7c-d7c24a07cec7\",\r\n//     \"dailyRate\": 25,\r\n//     \"stock\": 20\r\n//   }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{gear-up-base_api}}/api/provider/gear",
+              "host": [
+                "{{gear-up-base_api}}"
+              ],
+              "path": [
+                "api",
+                "provider",
+                "gear"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Gear",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Road Bike\",\r\n    \"brand\": \"Giant\",\r\n    \"description\": \"Lightweight road bike designed\",\r\n    \"image\": \"https://example1.com/images/road-bike.jpg\",\r\n    \"categoryId\": \"07362848-1258-4de5-9523-db3ef9fb8507\",\r\n    \"dailyRate\": 60,\r\n    \"stock\": 5\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{gear-up-base_api}}/api/provider/gear/c58b49e4-efa4-4010-8710-e18a640acdbe",
+              "host": [
+                "{{gear-up-base_api}}"
+              ],
+              "path": [
+                "api",
+                "provider",
+                "gear",
+                "c58b49e4-efa4-4010-8710-e18a640acdbe"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Gear",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{gear-up-base_api}}/api/provider/gear/ac3446fc-e9a4-4601-8511-d2ce912d31d0",
+              "host": [
+                "{{gear-up-base_api}}"
+              ],
+              "path": [
+                "api",
+                "provider",
+                "gear",
+                "ac3446fc-e9a4-4601-8511-d2ce912d31d0"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Incoming Order",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Road Bike\",\r\n    \"brand\": \"Giant\",\r\n    \"description\": \"Lightweight road bike designed\",\r\n    \"image\": \"https://example1.com/images/road-bike.jpg\",\r\n    \"categoryId\": \"07362848-1258-4de5-9523-db3ef9fb8507\",\r\n    \"dailyRate\": \"80.5\",\r\n    \"stock\": 5\r\n}"
+            },
+            "url": {
+              "raw": "{{gear-up-base_api}}/api/provider/orders",
+              "host": [
+                "{{gear-up-base_api}}"
+              ],
+              "path": [
+                "api",
+                "provider",
+                "orders"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Order Status",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\": \"RETURNED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{gear-up-base_api}}/api/provider/orders/10741b89-ed39-4625-aa19-6e3e6a75b43c",
+              "host": [
+                "{{gear-up-base_api}}"
+              ],
+              "path": [
+                "api",
+                "provider",
+                "orders",
+                "10741b89-ed39-4625-aa19-6e3e6a75b43c"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"cycling\"\r\n}\r\n// {\r\n//     \"name\": \"camping\"\r\n// }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{gear-up-base_api}}/api/admin/category",
+              "host": [
+                "{{gear-up-base_api}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "category"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All User",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"customer2@gmail.com\",\r\n    \"password\": \"111111\"\r\n}"
+            },
+            "url": {
+              "raw": "{{gear-up-base_api}}/api/admin/users",
+              "host": [
+                "{{gear-up-base_api}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "ACTIVE",
+                  "disabled": true
+                },
+                {
+                  "key": "searchTerm",
+                  "value": "admin",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User Status",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\": \"SUSPEND\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{gear-up-base_api}}/api/admin/users/efdd4061-23d1-4af2-a780-497a42f8b1a0",
+              "host": [
+                "{{gear-up-base_api}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "users",
+                "efdd4061-23d1-4af2-a780-497a42f8b1a0"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Gear",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gear-up-base_api}}/api/admin/gear",
+              "host": [
+                "{{gear-up-base_api}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "gear"
+              ],
+              "query": [
+                {
+                  "key": "searchTerm",
+                  "value": "Stove",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "3",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "2",
+                  "disabled": true
+                },
+                {
+                  "key": "sortBy",
+                  "value": "dailyRate",
+                  "disabled": true
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc",
+                  "disabled": true
+                },
+                {
+                  "key": "minRate",
+                  "value": "50",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Rentals",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gear-up-base_api}}/api/admin/rentals",
+              "host": [
+                "{{gear-up-base_api}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "rentals"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Public",
+      "item": [
+        {
+          "name": "Get All Gear",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gear-up-base_api}}/api/gear",
+              "host": [
+                "{{gear-up-base_api}}"
+              ],
+              "path": [
+                "api",
+                "gear"
+              ],
+              "query": [
+                {
+                  "key": "searchTerm",
+                  "value": "gloves",
+                  "disabled": true
+                },
+                {
+                  "key": "categoryName",
+                  "value": "cycling",
+                  "disabled": true
+                },
+                {
+                  "key": "minRate",
+                  "value": "1000",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "maxRate",
+                  "value": "10000",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "brand",
+                  "value": "Giro9",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Gear",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gear-up-base_api}}/api/gear/427d90b7-c95d-4f77-b522-4394d751bcb0",
+              "host": [
+                "{{gear-up-base_api}}"
+              ],
+              "path": [
+                "api",
+                "gear",
+                "427d90b7-c95d-4f77-b522-4394d751bcb0"
+              ],
+              "query": [
+                {
+                  "key": "searchTerm",
+                  "value": "gloves",
+                  "disabled": true
+                },
+                {
+                  "key": "categoryName",
+                  "value": "cycling",
+                  "disabled": true
+                },
+                {
+                  "key": "minPrice",
+                  "value": "1000",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "10000",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "brand",
+                  "value": "Giro9",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get  All Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gear-up-base_api}}/api/categories",
+              "host": [
+                "{{gear-up-base_api}}"
+              ],
+              "path": [
+                "api",
+                "categories"
+              ],
+              "query": [
+                {
+                  "key": "searchTerm",
+                  "value": "gloves",
+                  "disabled": true
+                },
+                {
+                  "key": "categoryName",
+                  "value": "cycling",
+                  "disabled": true
+                },
+                {
+                  "key": "minPrice",
+                  "value": "1000",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "10000",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "brand",
+                  "value": "Giro9",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Order",
+      "item": [
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"itemId\": \"\",\r\n    \"quantity\": 2,\r\n    \"startDate\": \"2026-07-20T00:00:00.000+06:00\",\r\n    \"returnDate\": \"2026-07-25T00:00:00.000+06:00\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{gear-up-base_api}}/api/rentals",
+              "host": [
+                "{{gear-up-base_api}}"
+              ],
+              "path": [
+                "api",
+                "rentals"
+              ],
+              "query": [
+                {
+                  "key": "searchTerm",
+                  "value": "gloves",
+                  "disabled": true
+                },
+                {
+                  "key": "categoryName",
+                  "value": "cycling",
+                  "disabled": true
+                },
+                {
+                  "key": "minPrice",
+                  "value": "1000",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "10000",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "brand",
+                  "value": "Giro9",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get My All Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gear-up-base_api}}/api/rentals",
+              "host": [
+                "{{gear-up-base_api}}"
+              ],
+              "path": [
+                "api",
+                "rentals"
+              ],
+              "query": [
+                {
+                  "key": "searchTerm",
+                  "value": "gloves",
+                  "disabled": true
+                },
+                {
+                  "key": "categoryName",
+                  "value": "cycling",
+                  "disabled": true
+                },
+                {
+                  "key": "minPrice",
+                  "value": "1000",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "10000",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "brand",
+                  "value": "Giro9",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Order",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"itemId\": \"427d90b7-c95d-4f77-b522-4394d751bcb0\",\r\n    \"quantity\": 2,\r\n    \"startDate\": \"2026-07-12T00:00:00.000+06:00\",\r\n    \"returnDate\": \"2026-07-15T00:00:00.000+06:00\"\r\n}"
+            },
+            "url": {
+              "raw": "{{gear-up-base_api}}/api/rentals/051faf58-5fb8-46f4-98dc-c98e6e533c59",
+              "host": [
+                "{{gear-up-base_api}}"
+              ],
+              "path": [
+                "api",
+                "rentals",
+                "051faf58-5fb8-46f4-98dc-c98e6e533c59"
+              ],
+              "query": [
+                {
+                  "key": "searchTerm",
+                  "value": "gloves",
+                  "disabled": true
+                },
+                {
+                  "key": "categoryName",
+                  "value": "cycling",
+                  "disabled": true
+                },
+                {
+                  "key": "minPrice",
+                  "value": "1000",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "10000",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "brand",
+                  "value": "Giro9",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Payment",
+      "item": [
+        {
+          "name": "Create a Payment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"orderId\": \"2ce112bc-5d1a-4abe-aadc-f22ec2a78c5f\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{gear-up-base_api}}/api/payments/create",
+              "host": [
+                "{{gear-up-base_api}}"
+              ],
+              "path": [
+                "api",
+                "payments",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Payments",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"orderId\": \"65c5d8eb-8047-4355-8541-93e6f2ee2106\"\r\n}"
+            },
+            "url": {
+              "raw": "{{gear-up-base_api}}/api/payments",
+              "host": [
+                "{{gear-up-base_api}}"
+              ],
+              "path": [
+                "api",
+                "payments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Payment",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"orderId\": \"65c5d8eb-8047-4355-8541-93e6f2ee2106\"\r\n}"
+            },
+            "url": {
+              "raw": "{{gear-up-base_api}}/api/payments/01b497b3-fa1a-464e-a8f7-ea0bc72f8dae",
+              "host": [
+                "{{gear-up-base_api}}"
+              ],
+              "path": [
+                "api",
+                "payments",
+                "01b497b3-fa1a-464e-a8f7-ea0bc72f8dae"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "Create Review",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"orderId\": \"\",\r\n    \"itemId\": \"\",\r\n    \"rating\": 5,\r\n    \"comment\": \"The gear was very nice\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{gear-up-base_api}}/api/reviews",
+              "host": [
+                "{{gear-up-base_api}}"
+              ],
+              "path": [
+                "api",
+                "reviews"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
