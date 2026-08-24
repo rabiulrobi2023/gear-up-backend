@@ -3,14 +3,14 @@ import { IJwtPayload } from "../interface/interface";
 import jwt, { JwtPayload, SignOptions } from "jsonwebtoken";
 
 export const generateAccessToken = (payload: IJwtPayload) => {
-  const token = jwt.sign(payload, config.JWT_ACCESS_TOKEN_SECRET, {
+  const token = jwt.sign(payload, config.JWT_ACCESS_TOKEN_SECRET as string, {
     expiresIn: config.JWT_ACCESS_TOKEN_EXPIRE_IN,
   } as SignOptions);
 
   return token;
 };
 export const generateRefreshToken = (payload: IJwtPayload) => {
-  const token = jwt.sign(payload, config.JWT_REFRESH_TOKEN_SECRET, {
+  const token = jwt.sign(payload, config.JWT_REFRESH_TOKEN_SECRET as string, {
     expiresIn: config.JWT_REFRESH_TOKEN_EXPIRE_IN,
   } as SignOptions);
 

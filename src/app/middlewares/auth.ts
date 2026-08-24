@@ -20,7 +20,10 @@ const auth = (...roles: Role[]) => {
       throw new AppError(StatusCodes.UNAUTHORIZED, "Unauthorized access");
     }
 
-    const decoded = verifyJwtToken(accessToken, config.JWT_ACCESS_TOKEN_SECRET);
+    const decoded = verifyJwtToken(
+      accessToken,
+      config.JWT_ACCESS_TOKEN_SECRET as string,
+    );
 
     const user = await prisma.user.findUnique({
       where: { id: decoded.id },
@@ -41,7 +44,7 @@ const auth = (...roles: Role[]) => {
     if (user.status === "SUSPEND") {
       throw new AppError(
         StatusCodes.FORBIDDEN,
-        "Your account has been suspended",
+        "Your account has been SUSPENDed",
       );
     }
 

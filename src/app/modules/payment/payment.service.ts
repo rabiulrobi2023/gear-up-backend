@@ -4,7 +4,11 @@ import AppError from "../../utils/AppError";
 import { stripe } from "../../lib/stripe";
 import config from "../../config";
 import Stripe from "stripe";
-import { PaymentMethod } from "../../../../generated/prisma/enums";
+import {
+  OrderStatus,
+  PaymentMethod,
+  PaymentStatus,
+} from "../../../../generated/prisma/enums";
 
 const createCheckoutSession = async (customerId: string, orderId: string) => {
   const order = await prisma.orders.findUnique({
@@ -26,19 +30,19 @@ const createCheckoutSession = async (customerId: string, orderId: string) => {
     throw new AppError(StatusCodes.NOT_FOUND, "Order not found");
   }
 
-  if (order.status !== "PENDING") {
+  if (order.status !== OrderStatus.CONFIRMED) {
     throw new AppError(
       StatusCodes.NOT_FOUND,
       "This order is not available for payment.",
     );
   }
 
-  if (order.expireAt < new Date()) {
-    throw new AppError(
-      StatusCodes.GONE,
-      "The order has expired. Please make a new order",
-    );
-  }
+  // if (order.expireAt < new Date()) {
+  //   throw new AppError(
+  //     StatusCodes.GONE,
+  //     "The order has expired. Please make a new order",
+  //   );
+  // }
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
@@ -118,7 +122,7 @@ const handleStripeWebhookEvent = async (payload: Buffer, signature: string) => {
         await tx.orders.update({
           where: { id: orderId },
           data: {
-            status: "CONFIRMED",
+            status: PaymentStatus.PAID,
           },
         });
 
@@ -127,7 +131,7 @@ const handleStripeWebhookEvent = async (payload: Buffer, signature: string) => {
             orderId,
             gatewayTransactionId,
             amount: Number(session.amount_total) / 100,
-            status: "PAID",
+            status: PaymentStatus.PAID,
             method,
           },
         });

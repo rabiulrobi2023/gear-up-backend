@@ -81,7 +81,29 @@ const createOrderFromDB = async (customerId: string, payload: ICreateOrder) => {
 const getAllOrdersFromDB = async (customerId: string) => {
   const result = await prisma.orders.findMany({
     where: { customerId: customerId },
-    include: { item: true },
+    include: {
+      item: {
+        include: {
+          provider: {
+            select: {
+              name: true,
+              email: true,
+              phone: true,
+            },
+          },
+          category: {
+            select: { name: true },
+          },
+        },
+        omit: {
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
+    },
+    orderBy:{
+      updatedAt:"desc"
+    }
   });
   return result;
 };
@@ -92,7 +114,27 @@ export const getSingleOrderFromDB = async (
 ) => {
   const result = await prisma.orders.findUnique({
     where: { customerId, id: orderId },
-    include: { item: true },
+    include: {
+      item: {
+        include: {
+          provider: {
+            select: {
+              name: true,
+              email: true,
+              phone: true,
+            },
+          },
+        },
+        omit: {
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
+    },
+    omit: {
+      createdAt: true,
+      updatedAt: true,
+    },
   });
 
   if (!result) {

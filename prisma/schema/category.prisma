@@ -1,8 +1,12 @@
 model Categories {
   id   String @id @unique @default(uuid())
   name String @unique
+  slug String @default("")
+  categoryPhoto String? @default("")
+  
 
   items     Items[]
+
   createdAt DateTime @default(now()) @db.Timestamptz()
   updatedAt DateTime @updatedAt @db.Timestamptz()
 

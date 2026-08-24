@@ -15,11 +15,12 @@ enum NodeEnv {
 }
 
 enum OrderStatus {
-  PENDING
+  PLACED
   CONFIRMED
+  CANCELLED
+  PAID
   PICKED
   RETURNED
-  CANCELLED
 }
 
 enum PaymentStatus {

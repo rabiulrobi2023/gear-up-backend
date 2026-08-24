@@ -17,9 +17,11 @@ import {
 import { UserWhereInput } from "../../../../generated/prisma/models";
 import { IItemQueryInput } from "../public/public.interface";
 import { UserStatus } from "../../../../generated/prisma/enums";
+import { createSlug } from "../../utils/createSlug";
 
 const createCategoryIntoDB = async (payload: ICreateCategory) => {
-  const name = payload.name.toLowerCase();
+  const { name, categoryPhoto } = payload;
+
   const isCategoryExists = await prisma.categories.findUnique({
     where: { name },
   });
@@ -27,7 +29,12 @@ const createCategoryIntoDB = async (payload: ICreateCategory) => {
   if (isCategoryExists) {
     throw new AppError(StatusCodes.CONFLICT, "Category already exists");
   }
-  const result = await prisma.categories.create({ data: { name } });
+
+  const slug = createSlug(name);
+
+  const result = await prisma.categories.create({
+    data: { name, categoryPhoto, slug },
+  });
   return result;
 };
 

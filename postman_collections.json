@@ -26,14 +26,8 @@
             },
             "url": {
               "raw": "{{gear-up-base_api}}/api/auth/register",
-              "host": [
-                "{{gear-up-base_api}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "register"
-              ]
+              "host": ["{{gear-up-base_api}}"],
+              "path": ["api", "auth", "register"]
             }
           },
           "response": []
@@ -54,14 +48,8 @@
             },
             "url": {
               "raw": "{{gear-up-base_api}}/api/auth/login",
-              "host": [
-                "{{gear-up-base_api}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "login"
-              ]
+              "host": ["{{gear-up-base_api}}"],
+              "path": ["api", "auth", "login"]
             }
           },
           "response": []
@@ -73,14 +61,8 @@
             "header": [],
             "url": {
               "raw": "{{gear-up-base_api}}/api/auth/me",
-              "host": [
-                "{{gear-up-base_api}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "me"
-              ]
+              "host": ["{{gear-up-base_api}}"],
+              "path": ["api", "auth", "me"]
             }
           },
           "response": []
@@ -106,14 +88,8 @@
             },
             "url": {
               "raw": "{{gear-up-base_api}}/api/provider/gear",
-              "host": [
-                "{{gear-up-base_api}}"
-              ],
-              "path": [
-                "api",
-                "provider",
-                "gear"
-              ]
+              "host": ["{{gear-up-base_api}}"],
+              "path": ["api", "provider", "gear"]
             }
           },
           "response": []
@@ -134,9 +110,7 @@
             },
             "url": {
               "raw": "{{gear-up-base_api}}/api/provider/gear/c58b49e4-efa4-4010-8710-e18a640acdbe",
-              "host": [
-                "{{gear-up-base_api}}"
-              ],
+              "host": ["{{gear-up-base_api}}"],
               "path": [
                 "api",
                 "provider",
@@ -154,9 +128,7 @@
             "header": [],
             "url": {
               "raw": "{{gear-up-base_api}}/api/provider/gear/ac3446fc-e9a4-4601-8511-d2ce912d31d0",
-              "host": [
-                "{{gear-up-base_api}}"
-              ],
+              "host": ["{{gear-up-base_api}}"],
               "path": [
                 "api",
                 "provider",
@@ -181,14 +153,8 @@
             },
             "url": {
               "raw": "{{gear-up-base_api}}/api/provider/orders",
-              "host": [
-                "{{gear-up-base_api}}"
-              ],
-              "path": [
-                "api",
-                "provider",
-                "orders"
-              ]
+              "host": ["{{gear-up-base_api}}"],
+              "path": ["api", "provider", "orders"]
             }
           },
           "response": []
@@ -209,9 +175,7 @@
             },
             "url": {
               "raw": "{{gear-up-base_api}}/api/provider/orders/10741b89-ed39-4625-aa19-6e3e6a75b43c",
-              "host": [
-                "{{gear-up-base_api}}"
-              ],
+              "host": ["{{gear-up-base_api}}"],
               "path": [
                 "api",
                 "provider",
@@ -243,14 +207,8 @@
             },
             "url": {
               "raw": "{{gear-up-base_api}}/api/admin/category",
-              "host": [
-                "{{gear-up-base_api}}"
-              ],
-              "path": [
-                "api",
-                "admin",
-                "category"
-              ]
+              "host": ["{{gear-up-base_api}}"],
+              "path": ["api", "admin", "category"]
             }
           },
           "response": []
@@ -269,14 +227,8 @@
             },
             "url": {
               "raw": "{{gear-up-base_api}}/api/admin/users",
-              "host": [
-                "{{gear-up-base_api}}"
-              ],
-              "path": [
-                "api",
-                "admin",
-                "users"
-              ],
+              "host": ["{{gear-up-base_api}}"],
+              "path": ["api", "admin", "users"],
               "query": [
                 {
                   "key": "status",
@@ -309,9 +261,7 @@
             },
             "url": {
               "raw": "{{gear-up-base_api}}/api/admin/users/efdd4061-23d1-4af2-a780-497a42f8b1a0",
-              "host": [
-                "{{gear-up-base_api}}"
-              ],
+              "host": ["{{gear-up-base_api}}"],
               "path": [
                 "api",
                 "admin",
@@ -329,14 +279,8 @@
             "header": [],
             "url": {
               "raw": "{{gear-up-base_api}}/api/admin/gear",
-              "host": [
-                "{{gear-up-base_api}}"
-              ],
-              "path": [
-                "api",
-                "admin",
-                "gear"
-              ],
+              "host": ["{{gear-up-base_api}}"],
+              "path": ["api", "admin", "gear"],
               "query": [
                 {
                   "key": "searchTerm",
@@ -380,14 +324,8 @@
             "header": [],
             "url": {
               "raw": "{{gear-up-base_api}}/api/admin/rentals",
-              "host": [
-                "{{gear-up-base_api}}"
-              ],
-              "path": [
-                "api",
-                "admin",
-                "rentals"
-              ]
+              "host": ["{{gear-up-base_api}}"],
+              "path": ["api", "admin", "rentals"]
             }
           },
           "response": []
@@ -404,13 +342,8 @@
             "header": [],
             "url": {
               "raw": "{{gear-up-base_api}}/api/gear",
-              "host": [
-                "{{gear-up-base_api}}"
-              ],
-              "path": [
-                "api",
-                "gear"
-              ],
+              "host": ["{{gear-up-base_api}}"],
+              "path": ["api", "gear"],
               "query": [
                 {
                   "key": "searchTerm",
@@ -452,14 +385,8 @@
             "header": [],
             "url": {
               "raw": "{{gear-up-base_api}}/api/gear/427d90b7-c95d-4f77-b522-4394d751bcb0",
-              "host": [
-                "{{gear-up-base_api}}"
-              ],
-              "path": [
-                "api",
-                "gear",
-                "427d90b7-c95d-4f77-b522-4394d751bcb0"
-              ],
+              "host": ["{{gear-up-base_api}}"],
+              "path": ["api", "gear", "427d90b7-c95d-4f77-b522-4394d751bcb0"],
               "query": [
                 {
                   "key": "searchTerm",
@@ -501,13 +428,8 @@
             "header": [],
             "url": {
               "raw": "{{gear-up-base_api}}/api/categories",
-              "host": [
-                "{{gear-up-base_api}}"
-              ],
-              "path": [
-                "api",
-                "categories"
-              ],
+              "host": ["{{gear-up-base_api}}"],
+              "path": ["api", "categories"],
               "query": [
                 {
                   "key": "searchTerm",
@@ -563,13 +485,8 @@
             },
             "url": {
               "raw": "{{gear-up-base_api}}/api/rentals",
-              "host": [
-                "{{gear-up-base_api}}"
-              ],
-              "path": [
-                "api",
-                "rentals"
-              ],
+              "host": ["{{gear-up-base_api}}"],
+              "path": ["api", "rentals"],
               "query": [
                 {
                   "key": "searchTerm",
@@ -611,13 +528,8 @@
             "header": [],
             "url": {
               "raw": "{{gear-up-base_api}}/api/rentals",
-              "host": [
-                "{{gear-up-base_api}}"
-              ],
-              "path": [
-                "api",
-                "rentals"
-              ],
+              "host": ["{{gear-up-base_api}}"],
+              "path": ["api", "rentals"],
               "query": [
                 {
                   "key": "searchTerm",
@@ -666,9 +578,7 @@
             },
             "url": {
               "raw": "{{gear-up-base_api}}/api/rentals/051faf58-5fb8-46f4-98dc-c98e6e533c59",
-              "host": [
-                "{{gear-up-base_api}}"
-              ],
+              "host": ["{{gear-up-base_api}}"],
               "path": [
                 "api",
                 "rentals",
@@ -729,14 +639,8 @@
             },
             "url": {
               "raw": "{{gear-up-base_api}}/api/payments/create",
-              "host": [
-                "{{gear-up-base_api}}"
-              ],
-              "path": [
-                "api",
-                "payments",
-                "create"
-              ]
+              "host": ["{{gear-up-base_api}}"],
+              "path": ["api", "payments", "create"]
             }
           },
           "response": []
@@ -755,13 +659,8 @@
             },
             "url": {
               "raw": "{{gear-up-base_api}}/api/payments",
-              "host": [
-                "{{gear-up-base_api}}"
-              ],
-              "path": [
-                "api",
-                "payments"
-              ]
+              "host": ["{{gear-up-base_api}}"],
+              "path": ["api", "payments"]
             }
           },
           "response": []
@@ -780,9 +679,7 @@
             },
             "url": {
               "raw": "{{gear-up-base_api}}/api/payments/01b497b3-fa1a-464e-a8f7-ea0bc72f8dae",
-              "host": [
-                "{{gear-up-base_api}}"
-              ],
+              "host": ["{{gear-up-base_api}}"],
               "path": [
                 "api",
                 "payments",
@@ -813,13 +710,8 @@
             },
             "url": {
               "raw": "{{gear-up-base_api}}/api/reviews",
-              "host": [
-                "{{gear-up-base_api}}"
-              ],
-              "path": [
-                "api",
-                "reviews"
-              ]
+              "host": ["{{gear-up-base_api}}"],
+              "path": ["api", "reviews"]
             }
           },
           "response": []

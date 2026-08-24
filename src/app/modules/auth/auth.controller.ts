@@ -7,9 +7,9 @@ import {
   setRefreshTokenIntoCookie,
 } from "../../utils/cookie";
 
-
 const registerUser = catchAsync(async (req, res, next) => {
   const payload = req.body;
+  console.log(payload);
   const result = await AuthService.registerUserIntoDB(payload);
   sendResponse(res, {
     statusCode: StatusCodes.CREATED,
@@ -40,8 +40,24 @@ const getMe = catchAsync(async (req, res, next) => {
     data: result,
   });
 });
+
+const refreshToken = catchAsync(async (req, res, next) => {
+  const existingRefreshToken = req.cookies.refreshToken;
+  const result = await AuthService.refreshToken(existingRefreshToken);
+  const { accessToken, refreshToken } = result;
+
+  setAccessTokenIntoCookie(res, accessToken);
+  setRefreshTokenIntoCookie(res, refreshToken);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Token refreshed successfully",
+    data: result,
+  });
+});
+
 export const AuthController = {
   registerUser,
   loginUser,
   getMe,
+  refreshToken,
 };

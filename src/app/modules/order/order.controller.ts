@@ -2,6 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { OrderService } from "./order.service";
+import { date } from "zod";
 
 const createOrder = catchAsync(async (req, res, next) => {
   const payload = req.body;
@@ -19,15 +20,23 @@ const getOrders = catchAsync(async (req, res, next) => {
   const result = await OrderService.getAllOrdersFromDB(customerId);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
-    message: result.length>0?"Orders retrieved successfully":"There is no any order",
-    data: result,
+    message:
+      result.length > 0
+        ? "Orders retrieved successfully"
+        : "There is no any order",
+    data: {
+      data: result,
+    },
   });
 });
 
 const getSingleOrder = catchAsync(async (req, res, next) => {
   const customerId = req.user.id;
-  const orderId = req.params.id
-  const result = await OrderService.getSingleOrderFromDB(customerId, orderId as string);
+  const orderId = req.params.id;
+  const result = await OrderService.getSingleOrderFromDB(
+    customerId,
+    orderId as string,
+  );
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: "Orders retrieved successfully",
@@ -35,9 +44,8 @@ const getSingleOrder = catchAsync(async (req, res, next) => {
   });
 });
 
-
 export const OrderController = {
   createOrder,
   getOrders,
-  getSingleOrder
+  getSingleOrder,
 };

@@ -3,6 +3,7 @@ import { UserWhereInput } from "../../../../generated/prisma/models";
 
 export interface ICreateCategory {
   name: string;
+  categoryPhoto: string;
 }
 
 export interface IUpdateUserStatus {
@@ -16,6 +17,3 @@ export interface IUserWhereInput extends UserWhereInput {
   sortBy?: string;
   sortOrder?: string;
 }
-
-
-

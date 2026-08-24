@@ -48,7 +48,7 @@ const updateUserStatus = catchAsync(async (req, res, next) => {
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,
-    message: `User ${result.status === UserStatus.ACTIVE ? "activated" : "suspended"} successfully`,
+    message: `User ${result.status === UserStatus.ACTIVE ? "activated" : "SUSPENDed"} successfully`,
     data: result,
   });
 });

@@ -67,7 +67,7 @@ const updateItem = async (
 const getMyIncomingOrdersFromDB = async (providerId: string) => {
   const result = await prisma.orders.findMany({
     where: {
-      status: { in: [OrderStatus.PENDING, OrderStatus.CONFIRMED] },
+      status: { in: [OrderStatus.PLACED, OrderStatus.CONFIRMED] },
       item: { providerId },
     },
   });

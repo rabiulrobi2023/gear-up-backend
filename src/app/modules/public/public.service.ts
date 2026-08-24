@@ -1,3 +1,4 @@
+import { TQueryFilter } from "./../../types/index";
 import { IPaginationOptions } from "./../../interface/interface";
 import { StatusCodes } from "http-status-codes";
 import { ItemsWhereInput } from "../../../../generated/prisma/models";
@@ -8,6 +9,7 @@ import buildSearchCondition from "../../utils/buildSearchCondition";
 import { itemfilterableFields, itemSearchableFields } from "./public.constant";
 import { IItemQueryInput } from "./public.interface";
 import calculatePagination from "../../utils/calculatePagination";
+import { Prisma } from "../../../../generated/prisma/client";
 
 const getAllGearFromDB = async (query: IItemQueryInput) => {
   const {
@@ -19,10 +21,11 @@ const getAllGearFromDB = async (query: IItemQueryInput) => {
     categoryName,
     minRate,
     maxRate,
+    stock,
     ...queryFilter
   } = query;
 
-  const andConditions: ItemsWhereInput[] = [];
+  const andConditions: Prisma.ItemsWhereInput[] = [];
   const pagination = calculatePagination({
     page,
     limit,
@@ -31,27 +34,46 @@ const getAllGearFromDB = async (query: IItemQueryInput) => {
   } as IPaginationOptions);
 
   if (searchTerm?.trim()) {
-    andConditions.push(buildSearchCondition(searchTerm, itemSearchableFields));
+    andConditions.push(
+      buildSearchCondition<Prisma.ItemsWhereInput>(
+        searchTerm,
+        itemSearchableFields,
+      ),
+    );
   }
+
   if (queryFilter) {
-    andConditions.push(buildFilterableField(queryFilter, itemfilterableFields));
+    andConditions.push(
+      buildFilterableField(queryFilter as TQueryFilter, itemfilterableFields),
+    );
   }
 
   if (minRate) {
-    andConditions.push({ dailyRate: { gte: minRate } });
+    andConditions.push({ dailyRate: { gte: Number(minRate) } });
   }
   if (maxRate) {
-    andConditions.push({ dailyRate: { lte: maxRate } });
+    andConditions.push({ dailyRate: { lte: Number(maxRate) } });
+  }
+
+  if (stock) {
+    andConditions.push({ stock: { equals: Number(stock) } });
   }
 
   if (categoryName) {
-    andConditions.push({ category: { name: categoryName } });
+    andConditions.push({
+      category: {
+        name: {
+          equals: categoryName,
+          mode: "insensitive",
+        },
+      },
+    });
   }
 
   const result = await prisma.items.findMany({
     where: { AND: andConditions },
     include: {
-      category: true,
+      category: { select: { id: true, name: true } },
       provider: { select: { name: true, email: true, phone: true } },
     },
     skip: pagination.skip,
@@ -86,7 +108,9 @@ const getSingleGearFromDB = async (itemId: string) => {
     throw new AppError(StatusCodes.NOT_FOUND, "Gear not found");
   }
 
-  return result;
+  return {
+    data: result,
+  };
 };
 
 const getAllCategoriesFromDB = async () => {

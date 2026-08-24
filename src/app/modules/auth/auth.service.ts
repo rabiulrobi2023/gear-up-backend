@@ -4,8 +4,13 @@ import { IRegisterUser } from "./auth.interface";
 import config from "../../config";
 import AppError from "../../utils/AppError";
 import { StatusCodes } from "http-status-codes";
-import { generateAccessToken, generateRefreshToken } from "../../utils/jwt";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyJwtToken,
+} from "../../utils/jwt";
 import { IJwtPayload } from "../../interface/interface";
+import { Role, UserStatus } from "../../../../generated/prisma/enums";
 
 const registerUserIntoDB = async (payload: IRegisterUser) => {
   if (payload.role === "ADMIN") {
@@ -45,11 +50,8 @@ const loginUserIntoDB = async (email: string, password: string) => {
   if (!user) {
     throw new AppError(StatusCodes.NOT_FOUND, "User not found");
   }
-  if (user.status === "SUSPEND") {
-    throw new AppError(
-      StatusCodes.FORBIDDEN,
-      "Your account has been suspended",
-    );
+  if (user.status === UserStatus.SUSPEND) {
+    throw new AppError(StatusCodes.FORBIDDEN, "Your account has been SUSPEND");
   }
 
   const isPasswordMatched = await bcrypt.compare(password, user.password);
@@ -82,8 +84,45 @@ const getMeFromDB = async (id: string) => {
   return result;
 };
 
+const refreshToken = async (existingRefreshToken: string) => {
+  if (!existingRefreshToken) {
+    throw new AppError(StatusCodes.UNAUTHORIZED, "Unauthorized access");
+  }
+
+  const decoded = verifyJwtToken(
+    existingRefreshToken,
+    config.JWT_REFRESH_TOKEN_SECRET,
+  );
+
+  const user = await prisma.user.findUnique({ where: { id: decoded.id } });
+
+  if (!user) {
+    throw new AppError(StatusCodes.NOT_FOUND, "User not found");
+  }
+
+  if (user.status === UserStatus.SUSPEND) {
+    throw new AppError(StatusCodes.FORBIDDEN, "Your account has been SUSPEND");
+  }
+
+  const jwtTokenPayload: IJwtPayload = {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+  };
+
+  const accessToken = generateAccessToken(jwtTokenPayload);
+  const refreshToken = generateRefreshToken(jwtTokenPayload);
+
+  return {
+    accessToken,
+    refreshToken,
+  };
+};
+
 export const AuthService = {
   registerUserIntoDB,
   loginUserIntoDB,
   getMeFromDB,
+  refreshToken,
 };

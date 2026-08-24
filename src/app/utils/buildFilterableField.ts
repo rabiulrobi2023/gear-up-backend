@@ -1,20 +1,26 @@
-import { IItemQueryInput } from "../modules/public/public.interface";
+import { TQueryFilter } from "../types";
 
-const buildFilterableField = (
-  queryFilter: IItemQueryInput,
-  filterableFields: string[],
+const buildFilterableField = <T>(
+  queryFilter: TQueryFilter,
+  filterableFields: readonly string[],
 ) => {
-  return {
-    AND: Object.entries(queryFilter)
-      .filter(
-        ([key, value]) =>
-          filterableFields.includes(key) &&
-          value !== undefined &&
-          value !== null &&
-          value !== "",
-      )
-      .map(([key, value]) => ({ [key]: value })),
-  };
+  const AND = Object.entries(queryFilter)
+    .filter(
+      ([key, value]) =>
+        filterableFields.includes(key) &&
+        value !== undefined &&
+        (Array.isArray(value) ? value.length > 0 : value.trim() !== ""),
+    )
+    .map(([key, value]) => {
+      if (Array.isArray(value)) {
+        return {
+          [key]: { in: value },
+        };
+      }
+      return { [key]: value };
+    });
+
+  return { AND };
 };
 
 export default buildFilterableField;

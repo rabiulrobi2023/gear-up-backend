@@ -13,7 +13,7 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
     typeof error?.statusCode === "number"
       ? error.statusCode
       : StatusCodes.INTERNAL_SERVER_ERROR;
-  let message = error instanceof Error ? error.message : "Something went wrong";
+  let message = error instanceof Error ? error.message : "Something went wrong....";
   let source: IErrorSource[] = [];
 
   if (error instanceof AppError) {
