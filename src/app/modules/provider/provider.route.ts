@@ -16,6 +16,9 @@ router.post(
   validationRequest(addItemValidationSchema),
   ProviderController.addItem,
 );
+
+router.get("/my-gears", auth(Role.PROVIDER), ProviderController.getMyGears);
+
 router.get("/orders", ProviderController.getMyIncomingOrder);
 
 router.put(

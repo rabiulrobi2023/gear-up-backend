@@ -8,7 +8,12 @@ import {
   OrderStatus,
   PaymentMethod,
   PaymentStatus,
+  Role,
 } from "../../../../generated/prisma/enums";
+import {
+  PaymentsWhereInput,
+  ReviewsWhereInput,
+} from "../../../../generated/prisma/models";
 
 const createCheckoutSession = async (customerId: string, orderId: string) => {
   const order = await prisma.orders.findUnique({
@@ -144,23 +149,55 @@ const handleStripeWebhookEvent = async (payload: Buffer, signature: string) => {
   }
 };
 
-const getAllPaymentsFromDB = async () => {
-  const result = await prisma.payments.findMany({
-    include: {
+const getAllPaymentsFromDB = async (role: string, customerId: string) => {
+  const whereCondition = [];
+
+  if (role === Role.CUSTOMER) {
+    whereCondition.push({
       order: {
-        include: {
-          customer: { select: { name: true, email: true } },
+        customerId,
+      },
+    });
+  }
+
+  const result = await prisma.payments.findMany({
+    where: {
+      AND: whereCondition,
+    },
+
+    select: {
+      id: true,
+      amount: true,
+      status: true,
+      method: true,
+      order: {
+        select: {
+          quantity: true,
+          totalDays: true,
+
+          customer: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+
           item: {
             select: {
               name: true,
-              brand: true,
-              category: { select: { name: true } },
+              dailyRate: true,
+              category: {
+                select: {
+                  name: true,
+                },
+              },
             },
           },
         },
       },
     },
   });
+
   return result;
 };
 
@@ -175,6 +212,7 @@ const getSinglePaymentsByIdFromDB = async (id: string) => {
             select: {
               name: true,
               brand: true,
+              dailyRate: true,
               provider: { select: { name: true } },
             },
           },

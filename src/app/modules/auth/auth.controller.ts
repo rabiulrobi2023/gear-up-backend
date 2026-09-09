@@ -9,7 +9,7 @@ import {
 
 const registerUser = catchAsync(async (req, res, next) => {
   const payload = req.body;
-  console.log(payload);
+
   const result = await AuthService.registerUserIntoDB(payload);
   sendResponse(res, {
     statusCode: StatusCodes.CREATED,

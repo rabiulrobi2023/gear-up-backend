@@ -15,7 +15,7 @@ const createReview = async (customerId: string, payload: ICreateReview) => {
   });
 
   if (!order) {
-    throw new AppError(StatusCodes.NOT_FOUND, "Completed order not found");
+    throw new AppError(StatusCodes.NOT_FOUND, "Order not found");
   }
 
   const existingReview = await prisma.reviews.findUnique({
@@ -29,10 +29,18 @@ const createReview = async (customerId: string, payload: ICreateReview) => {
     );
   }
 
-  const result = await prisma.reviews.create({
-    data: { ...payload, customerId },
+  const result = await prisma.$transaction(async (tx) => {
+    const reviewRes = await tx.reviews.create({
+      data: { ...payload, customerId },
+    });
+    await tx.orders.update({
+      where: {
+        id: payload.orderId,
+      },
+      data: { status: OrderStatus.COMPLETED },
+    });
+    return reviewRes;
   });
-
   return result;
 };
 

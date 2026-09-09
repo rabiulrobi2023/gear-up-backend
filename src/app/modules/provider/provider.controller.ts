@@ -5,6 +5,7 @@ import { ProviderService } from "./provider.service";
 
 const addItem = catchAsync(async (req, res, next) => {
   const payload = req.body;
+  console.log(payload)
   const userId = req.user.id;
   const result = await ProviderService.addItem(userId, payload);
 
@@ -31,9 +32,18 @@ const updateItem = catchAsync(async (req, res, next) => {
     data: result,
   });
 });
+const getMyGears = catchAsync(async (req, res, next) => {
+  const providerId = req.user.id;
+  const result = await ProviderService.getMyGears(providerId as string);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Gear retrieved successfully",
+    data: result,
+  });
+});
 
 const getMyIncomingOrder = catchAsync(async (req, res, next) => {
-  const providerId = req.params.id;
+  const providerId = req.user.id;
   const result = await ProviderService.getMyIncomingOrdersFromDB(
     providerId as string,
   );
@@ -76,6 +86,7 @@ export const ProviderController = {
   addItem,
   updateItem,
   deleteGear,
+  getMyGears,
   getMyIncomingOrder,
   updateOrderStatus,
 };

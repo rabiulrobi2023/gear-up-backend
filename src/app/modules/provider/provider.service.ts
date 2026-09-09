@@ -23,8 +23,9 @@ const addItem = async (providerId: string, payload: IAddItem) => {
       providerId,
       isAvailable: payload.stock > 0 ? true : false,
     },
-    include: {
-      category: true,
+    omit: {
+      createdAt: true,
+      updatedAt: true,
     },
   });
 
@@ -62,6 +63,26 @@ const updateItem = async (
   });
 
   return result;
+};
+
+const getMyGears = async (userId: string) => {
+  const result = await prisma.items.findMany({
+    where: {
+      providerId: userId,
+    },
+    include: {
+      category: { select: { id: true, name: true } },
+      provider: { select: { name: true, email: true, phone: true } },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return {
+    data: result,
+    metadata: {},
+  };
 };
 
 const getMyIncomingOrdersFromDB = async (providerId: string) => {
@@ -143,6 +164,7 @@ const deleteGearFromDB = async (id: string) => {
 
 export const ProviderService = {
   addItem,
+  getMyGears,
   updateItem,
   getMyIncomingOrdersFromDB,
   deleteGearFromDB,

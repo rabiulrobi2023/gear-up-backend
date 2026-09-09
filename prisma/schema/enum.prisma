@@ -21,6 +21,7 @@ enum OrderStatus {
   PAID
   PICKED
   RETURNED
+  COMPLETED
 }
 
 enum PaymentStatus {

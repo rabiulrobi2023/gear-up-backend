@@ -18,6 +18,7 @@ const getAllGear = catchAsync(async (req, res, next) => {
 const getSingleGear = catchAsync(async (req, res, next) => {
   const id = req.params.id;
   const result = await PublicService.getSingleGearFromDB(id as string);
+
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: result ? "Gear retrieved successfully" : "No gear found",

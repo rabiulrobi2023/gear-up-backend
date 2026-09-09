@@ -36,7 +36,10 @@ const handleStripeWebhook = catchAsync(async (req, res) => {
 });
 
 const getAllPayments = catchAsync(async (req, res, next) => {
-  const result = await PaymentService.getAllPaymentsFromDB();
+  const user = req.user;
+  const role = user.role;
+  const customerId = user.id;
+  const result = await PaymentService.getAllPaymentsFromDB(role, customerId);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message:

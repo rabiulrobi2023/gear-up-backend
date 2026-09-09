@@ -108,9 +108,7 @@ const getSingleGearFromDB = async (itemId: string) => {
     throw new AppError(StatusCodes.NOT_FOUND, "Gear not found");
   }
 
-  return {
-    data: result,
-  };
+  return result
 };
 
 const getAllCategoriesFromDB = async () => {

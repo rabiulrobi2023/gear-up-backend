@@ -6,7 +6,7 @@ const validationRequest = (zodSchema: ZodObject) => {
     if (req.body.data) {
       req.body = req.body(JSON.parse(req.body.dada));
     }
-
+console.log(req.body)
     await zodSchema.parseAsync(req.body);
     next();
   });
