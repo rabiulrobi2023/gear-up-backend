@@ -5,7 +5,6 @@ import { ProviderService } from "./provider.service";
 
 const addItem = catchAsync(async (req, res, next) => {
   const payload = req.body;
-  console.log(payload)
   const userId = req.user.id;
   const result = await ProviderService.addItem(userId, payload);
 
@@ -42,9 +41,20 @@ const getMyGears = catchAsync(async (req, res, next) => {
   });
 });
 
-const getMyIncomingOrder = catchAsync(async (req, res, next) => {
+const getMyAllOrders = catchAsync(async (req, res, next) => {
   const providerId = req.user.id;
-  const result = await ProviderService.getMyIncomingOrdersFromDB(
+  
+  const result = await ProviderService.getMyGears(providerId as string);
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Order retrieved successfully",
+    data: result,
+  });
+});
+const getMyPendingOrders = catchAsync(async (req, res, next) => {
+  const providerId = req.user.id;
+  const result = await ProviderService.getMyPendingOrdersFromDB(
     providerId as string,
   );
 
@@ -56,8 +66,12 @@ const getMyIncomingOrder = catchAsync(async (req, res, next) => {
 });
 
 const updateOrderStatus = catchAsync(async (req, res, next) => {
+
   const orderId = req.params.id;
+
+  console.log(orderId)
   const payload = req.body;
+  console.log(payload)
 
   const result = await ProviderService.updateOrderStatusIntoDB(
     orderId as string,
@@ -73,11 +87,22 @@ const updateOrderStatus = catchAsync(async (req, res, next) => {
 
 const deleteGear = catchAsync(async (req, res, next) => {
   const id = req.params.id;
-  const result = await ProviderService.deleteGearFromDB(id as string);
+  const providerId = req.user.id
+  const result = await ProviderService.deleteGearFromDB(id as string, providerId);
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: "Gear deleted successfully",
+    data: result,
+  });
+});
+
+const getProviderItemStatistics = catchAsync(async (req, res, next) => {
+  const providerId = req.user.id;
+  const result = await ProviderService.getProviderItemStatistics(providerId);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Provider gear statistics retrieved successfully",
     data: result,
   });
 });
@@ -87,6 +112,8 @@ export const ProviderController = {
   updateItem,
   deleteGear,
   getMyGears,
-  getMyIncomingOrder,
+  getMyAllOrders,
+  getMyPendingOrders,
   updateOrderStatus,
+  getProviderItemStatistics,
 };

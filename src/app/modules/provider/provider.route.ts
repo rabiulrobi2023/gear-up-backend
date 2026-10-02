@@ -19,7 +19,12 @@ router.post(
 
 router.get("/my-gears", auth(Role.PROVIDER), ProviderController.getMyGears);
 
-router.get("/orders", ProviderController.getMyIncomingOrder);
+router.get("/orders", auth(Role.PROVIDER), ProviderController.getMyAllOrders);
+router.get(
+  "/pending-orders",
+  auth(Role.PROVIDER),
+  ProviderController.getMyPendingOrders,
+);
 
 router.put(
   "/gear/:itemId",
@@ -28,13 +33,19 @@ router.put(
   ProviderController.updateItem,
 );
 
-router.delete("/gear/:id", ProviderController.deleteGear);
+router.patch("/gear/:id", auth(Role.ADMIN), ProviderController.deleteGear);
 
 router.patch(
   "/orders/:id",
   auth(Role.PROVIDER),
   validationRequest(updateOrderStatusSchema),
   ProviderController.updateOrderStatus,
+);
+
+router.get(
+  "/gear-statistics",
+  auth(Role.PROVIDER),
+  ProviderController.getProviderItemStatistics,
 );
 
 export const providerRouter = router;

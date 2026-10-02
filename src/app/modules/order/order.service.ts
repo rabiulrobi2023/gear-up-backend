@@ -78,10 +78,15 @@ const createOrderFromDB = async (customerId: string, payload: ICreateOrder) => {
   return result;
 };
 
-const getAllOrdersFromDB = async (customerId: string) => {
+const getMyAllOrders = async (id: string) => {
   const result = await prisma.orders.findMany({
-    where: { customerId: customerId },
+    where: { OR: [{ customerId: id }, { item: { providerId: id } }] },
     include: {
+      customer: {
+        omit: {
+          password: true,
+        },
+      },
       item: {
         include: {
           provider: {
@@ -95,17 +100,15 @@ const getAllOrdersFromDB = async (customerId: string) => {
             select: { name: true },
           },
         },
-        omit: {
-          createdAt: true,
-          updatedAt: true,
-        },
       },
     },
-    orderBy:{
-      updatedAt:"desc"
-    }
+    orderBy: {
+      createdAt: "desc",
+    },
   });
-  return result;
+  return {
+    data: result,
+  };
 };
 
 export const getSingleOrderFromDB = async (
@@ -146,6 +149,6 @@ export const getSingleOrderFromDB = async (
 
 export const OrderService = {
   createOrderFromDB,
-  getAllOrdersFromDB,
+  getMyAllOrders,
   getSingleOrderFromDB,
 };

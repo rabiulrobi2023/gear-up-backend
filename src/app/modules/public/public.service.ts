@@ -71,7 +71,7 @@ const getAllGearFromDB = async (query: IItemQueryInput) => {
   }
 
   const result = await prisma.items.findMany({
-    where: { AND: andConditions },
+    where: { AND: andConditions, isDeleted: false },
     include: {
       category: { select: { id: true, name: true } },
       provider: { select: { name: true, email: true, phone: true } },
@@ -95,9 +95,9 @@ const getAllGearFromDB = async (query: IItemQueryInput) => {
 
 const getSingleGearFromDB = async (itemId: string) => {
   const result = await prisma.items.findUnique({
-    where: { id: itemId },
+    where: { id: itemId,isDeleted:false },
     include: {
-      category: { select: { name: true } },
+      category: { select: { id: true, name: true } },
       provider: {
         select: { name: true, address: true, email: true, phone: true },
       },
@@ -108,7 +108,7 @@ const getSingleGearFromDB = async (itemId: string) => {
     throw new AppError(StatusCodes.NOT_FOUND, "Gear not found");
   }
 
-  return result
+  return result;
 };
 
 const getAllCategoriesFromDB = async () => {

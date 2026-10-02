@@ -12,6 +12,7 @@ router.post(
   validationRequest(createOrderValidationSchema),
   OrderController.createOrder,
 );
-router.get("/rentals", auth(Role.CUSTOMER), OrderController.getOrders);
+router.get("/rentals", auth(Role.CUSTOMER,Role.PROVIDER), OrderController.getMyAllOrders);
 router.get("/rentals/:id", auth(Role.CUSTOMER), OrderController.getSingleOrder);
+
 export const orderRouter = router;

@@ -15,18 +15,16 @@ const createOrder = catchAsync(async (req, res, next) => {
   });
 });
 
-const getOrders = catchAsync(async (req, res, next) => {
+const getMyAllOrders = catchAsync(async (req, res, next) => {
   const customerId = req.user.id;
-  const result = await OrderService.getAllOrdersFromDB(customerId);
+  const result = await OrderService.getMyAllOrders(customerId);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message:
-      result.length > 0
+      result.data.length > 0
         ? "Orders retrieved successfully"
         : "There is no any order",
-    data: {
-      data: result,
-    },
+    data: result,
   });
 });
 
@@ -46,6 +44,6 @@ const getSingleOrder = catchAsync(async (req, res, next) => {
 
 export const OrderController = {
   createOrder,
-  getOrders,
+  getMyAllOrders,
   getSingleOrder,
 };

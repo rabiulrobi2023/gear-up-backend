@@ -29,13 +29,15 @@ export const updateItemValidationSchema = z
       .trim()
       .min(3, "Name must be at least 3 characters long")
       .optional(),
-    bran: z
+    brand: z
       .string()
       .trim()
       .min(2, "Brand name must be at least 2 characters long")
       .optional(),
     image: z.string().optional(),
     categoryId: z.string("Category is required").optional(),
+
+    description: z.string().optional(),
     dailyRate: z
       .number("Daily rate is required")
       .gt(0, "Daily rate must be greater than 0")

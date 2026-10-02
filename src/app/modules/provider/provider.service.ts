@@ -69,6 +69,7 @@ const getMyGears = async (userId: string) => {
   const result = await prisma.items.findMany({
     where: {
       providerId: userId,
+      isDeleted: false,
     },
     include: {
       category: { select: { id: true, name: true } },
@@ -85,15 +86,74 @@ const getMyGears = async (userId: string) => {
   };
 };
 
-const getMyIncomingOrdersFromDB = async (providerId: string) => {
+const getProviderOrders = async (providerId: string) => {
+  const result = await prisma.orders.findMany({
+    where: { item: { providerId } },
+    include: {
+      customer: {
+        omit: {
+          password: true,
+        },
+      },
+      item: {
+        include: {
+          provider: {
+            select: {
+              name: true,
+              email: true,
+              phone: true,
+            },
+          },
+          category: {
+            select: { name: true },
+          },
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return {
+    data: result,
+  };
+};
+
+const getMyPendingOrdersFromDB = async (providerId: string) => {
   const result = await prisma.orders.findMany({
     where: {
-      status: { in: [OrderStatus.PLACED, OrderStatus.CONFIRMED] },
+      status: OrderStatus.PLACED,
       item: { providerId },
+    },
+    include: {
+      customer: {
+        omit: {
+          password: true,
+        },
+      },
+      item: {
+        include: {
+          provider: {
+            select: {
+              name: true,
+              email: true,
+              phone: true,
+            },
+          },
+          category: {
+            select: { name: true },
+          },
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "asc",
     },
   });
 
-  return result;
+  return {
+    data: result,
+  };
 };
 
 const updateOrderStatusIntoDB = async (
@@ -144,29 +204,58 @@ const updateOrderStatusIntoDB = async (
   return result;
 };
 
-const deleteGearFromDB = async (id: string) => {
-  const isGearExist = await prisma.items.findUnique({ where: { id } });
+const deleteGearFromDB = async (id: string, providerId: string) => {
+
+  const isGearExist = await prisma.items.findUnique({
+    where: { id, providerId, isDeleted: false },
+  });
   if (!isGearExist) {
     throw new AppError(StatusCodes.NOT_FOUND, "Gear not found");
   }
 
-  const haveAnyOrderOfThisGear = await prisma.orders.findFirst();
-  if (haveAnyOrderOfThisGear) {
-    throw new AppError(
-      StatusCodes.BAD_REQUEST,
-      "You cannot delete this gear, because it has already perched by customer",
-    );
-  }
-
-  await prisma.items.delete({ where: { id } });
+  await prisma.items.update({
+    where: { id, providerId },
+    data: { isDeleted: true },
+  });
   return null;
+};
+
+const getProviderItemStatistics = async (providerId: string) => {
+  const [totalGears, activeGears, pendingGears] = await Promise.all([
+    prisma.items.count({
+      where: {
+        providerId,
+      },
+    }),
+
+    prisma.items.count({
+      where: { providerId, stock: { gt: 0 } },
+    }),
+
+    prisma.orders.count({
+      where: {
+        status: OrderStatus.PLACED,
+        item: {
+          providerId,
+        },
+      },
+    }),
+  ]);
+
+  return {
+    totalGears,
+    activeGears,
+    pendingGears,
+  };
 };
 
 export const ProviderService = {
   addItem,
   getMyGears,
   updateItem,
-  getMyIncomingOrdersFromDB,
+  getProviderOrders,
+  getMyPendingOrdersFromDB,
   deleteGearFromDB,
   updateOrderStatusIntoDB,
+  getProviderItemStatistics,
 };

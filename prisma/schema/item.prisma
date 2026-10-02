@@ -13,6 +13,7 @@ model Items {
 
   dailyRate Decimal @db.Decimal(10, 2)
   stock     Int
+  isDeleted Boolean @default(false)
 
   order Orders[]
 
