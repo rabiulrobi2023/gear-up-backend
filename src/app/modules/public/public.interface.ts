@@ -2,6 +2,7 @@ import { ItemsWhereInput } from "../../../../generated/prisma/models";
 
 export interface IItemQueryInput extends ItemsWhereInput {
   searchTerm?: string;
+  slug?: string;
   categoryName?: string;
   minRate?: string;
   maxRate?: string;

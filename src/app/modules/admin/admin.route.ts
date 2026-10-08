@@ -10,5 +10,10 @@ router.get("/users", auth(Role.ADMIN), AdminController.getAllUsers);
 router.get("/gear", auth(Role.ADMIN), PublicController.getAllGear);
 router.get("/rentals", auth(Role.ADMIN), AdminController.getAllOrders);
 router.patch("/users/:id", auth(Role.ADMIN), AdminController.updateUserStatus);
+router.get(
+  "/statistics",
+  auth(Role.ADMIN),
+  AdminController.getAdminDashboardStatistics,
+);
 
 export const adminRouter = router;

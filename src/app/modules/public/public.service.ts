@@ -19,6 +19,7 @@ const getAllGearFromDB = async (query: IItemQueryInput) => {
     sortBy,
     sortOrder,
     categoryName,
+    slug,
     minRate,
     maxRate,
     stock,
@@ -70,6 +71,16 @@ const getAllGearFromDB = async (query: IItemQueryInput) => {
     });
   }
 
+  if (slug) {
+    andConditions.push({
+      category: {
+        slug: {
+          equals: slug,
+        },
+      },
+    });
+  }
+
   const result = await prisma.items.findMany({
     where: { AND: andConditions, isDeleted: false },
     include: {
@@ -84,7 +95,7 @@ const getAllGearFromDB = async (query: IItemQueryInput) => {
   const total = await prisma.items.count({ where: { AND: andConditions } });
   return {
     data: result,
-    metaData: {
+    metadata: {
       page: pagination.page,
       limit: pagination.limit,
       total,
@@ -95,7 +106,7 @@ const getAllGearFromDB = async (query: IItemQueryInput) => {
 
 const getSingleGearFromDB = async (itemId: string) => {
   const result = await prisma.items.findUnique({
-    where: { id: itemId,isDeleted:false },
+    where: { id: itemId, isDeleted: false },
     include: {
       category: { select: { id: true, name: true } },
       provider: {

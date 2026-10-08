@@ -23,7 +23,7 @@ export interface IPagination {
   sortOrder: "asc" | "desc";
 }
 
-export interface IMetaData {
+export interface Imetadata {
   page: number;
   limit: number;
   skip: number;

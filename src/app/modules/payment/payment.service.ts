@@ -170,6 +170,7 @@ const getAllPaymentsFromDB = async (role: string, customerId: string) => {
       amount: true,
       status: true,
       method: true,
+      createdAt: true,
       order: {
         select: {
           quantity: true,

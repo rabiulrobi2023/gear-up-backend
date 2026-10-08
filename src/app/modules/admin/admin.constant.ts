@@ -1,8 +1,8 @@
 import { Role, UserStatus } from "../../../../generated/prisma/enums";
-import { ISearchableEnumFields } from "../../utils/buildSearchCondition";
+import { ISearchableEnumField } from "../../utils/buildSearchCondition";
 
 export const userSearchableFields = ["name", "email", "address"];
-export const userSearchableEnumAndNumericField: ISearchableEnumFields[] = [
+export const userSearchableEnumAndNumericField: ISearchableEnumField[] = [
   {
     field: "role",
     values: Object.values(Role),

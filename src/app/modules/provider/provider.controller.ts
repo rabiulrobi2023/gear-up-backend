@@ -69,9 +69,7 @@ const updateOrderStatus = catchAsync(async (req, res, next) => {
 
   const orderId = req.params.id;
 
-  console.log(orderId)
   const payload = req.body;
-  console.log(payload)
 
   const result = await ProviderService.updateOrderStatusIntoDB(
     orderId as string,

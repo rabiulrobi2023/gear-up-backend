@@ -15,6 +15,7 @@ const createCategory = catchAsync(async (req, res) => {
 });
 
 const getAllUsers = catchAsync(async (req, res, next) => {
+
   const result = await AdminService.getAllUser(req.query);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
@@ -53,9 +54,19 @@ const updateUserStatus = catchAsync(async (req, res, next) => {
   });
 });
 
+const getAdminDashboardStatistics = catchAsync(async (req, res, next) => {
+  const result = await AdminService.getAdminDashboardStatistics();
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Admin dashboard statistics data retrieved successfully",
+    data: result,
+  });
+});
+
 export const AdminController = {
   createCategory,
   getAllUsers,
   getAllOrders,
   updateUserStatus,
+  getAdminDashboardStatistics,
 };

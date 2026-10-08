@@ -8,7 +8,7 @@ import {
 } from "./admin.interface";
 
 import calculatePagination from "../../utils/calculatePagination";
-import { IMetaData, IPaginationOptions } from "../../interface/interface";
+import { Imetadata, IPaginationOptions } from "../../interface/interface";
 import buildSearchCondition from "../../utils/buildSearchCondition";
 import {
   userSearchableEnumAndNumericField,
@@ -76,13 +76,13 @@ const getAllUser = async (query: IUserWhereInput) => {
   const totalPage = Math.ceil(total / pagination.limit);
   return {
     data: result,
-    metaData: {
+    metadata: {
       page: pagination.page,
       limit: pagination.limit,
       skip: pagination.skip,
       total,
       totalPage,
-    } as IMetaData,
+    } as Imetadata,
   };
 };
 
@@ -124,9 +124,26 @@ const updateUserStatus = async (
   return result;
 };
 
+const getAdminDashboardStatistics = async () => {
+  const [totalUsers, totalGears, totalRentals, totalPendingOrder] =
+    await Promise.all([
+      prisma.user.count({ where: { status: UserStatus.ACTIVE } }),
+      prisma.items.count({ where: { isDeleted: false } }),
+      prisma.orders.count({ where: { status: "PICKED" } }),
+      prisma.orders.count({ where: { status: "PAID" } }),
+    ]);
+  return {
+    totalUsers,
+    totalGears,
+    totalRentals,
+    totalPendingOrder,
+  };
+};
+
 export const AdminService = {
   createCategoryIntoDB,
   getAllUser,
   getAllOrder,
   updateUserStatus,
+  getAdminDashboardStatistics,
 };

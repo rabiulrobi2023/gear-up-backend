@@ -205,7 +205,6 @@ const updateOrderStatusIntoDB = async (
 };
 
 const deleteGearFromDB = async (id: string, providerId: string) => {
-
   const isGearExist = await prisma.items.findUnique({
     where: { id, providerId, isDeleted: false },
   });

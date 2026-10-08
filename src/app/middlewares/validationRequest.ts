@@ -4,7 +4,7 @@ import { ZodObject } from "zod";
 const validationRequest = (zodSchema: ZodObject) => {
 
   return catchAsync(async (req, res, next) => {
-    console.log(req.body)
+
     if (req.body.data) {
       req.body = req.body(JSON.parse(req.body.dada));
     }
